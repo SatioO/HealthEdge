@@ -38,11 +38,11 @@ export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Stack screenOptions={{ headerShown: false }}>
+        <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="login" />
-          <Stack.Screen name="signup" />
-          <Stack.Screen name="dashboard" />
+          <Stack.Screen name="login/index" options={{ headerShown: false }} />
+          <Stack.Screen name="signup/index" options={{ headerShown: false }} />
+          <Stack.Screen name="dashboard/index" />
           <Stack.Screen name="+not-found" />
         </Stack>
         <StatusBar style="auto" />
