@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import {
+    View,
+    Text,
+    StyleSheet,
+    TouchableOpacity,
+    ScrollView,
+} from 'react-native';
 import Step1 from './steps/Step1';
 import Step2 from './steps/Step2';
 import Step3 from './steps/Step3';
@@ -9,7 +15,7 @@ export default function BookAppointment() {
     const [currentStep, setCurrentStep] = useState<number>(1);
 
     function handleNext() {
-        if (currentStep < 4){
+        if (currentStep < 4) {
             setCurrentStep((step) => step + 1);
         }
     }
@@ -32,7 +38,7 @@ export default function BookAppointment() {
                 {currentStep === 4 && (
                     <Step4 route={undefined} navigation={undefined} />
                 )}
-                {(currentStep > 1 && currentStep !== 4) && (
+                {currentStep > 1 && currentStep !== 4 && (
                     <View style={styles.buttoncontainer}>
                         <TouchableOpacity
                             style={styles.button}
@@ -130,7 +136,7 @@ const styles = StyleSheet.create({
         marginLeft: '25%',
     },
     button: {
-        width:'48%',
+        width: '48%',
         backgroundColor: '#4caf50',
         paddingVertical: 10,
         flex: 1,
@@ -138,10 +144,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    buttonText:{
+    buttonText: {
         color: '#fff',
         fontSize: 18,
-        fontWeight:'bold',
+        fontWeight: 'bold',
         textAlign: 'center',
     },
 });
