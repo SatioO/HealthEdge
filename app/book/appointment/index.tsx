@@ -18,11 +18,12 @@ export default function BookAppointment() {
   const [values, setValues] = useState<AppointmentForm>({
     category: '',
     speciality: '',
+    provider: '',
   });
 
   function handleNext() {
-    if (currentStep < 4) {
-      setCurrentStep((step) => step + 1);
+    if (currentStep === 1 && values.speciality) {
+      setCurrentStep(currentStep + 1);
     }
   }
 
@@ -60,7 +61,11 @@ export default function BookAppointment() {
         )}
         {currentStep < 3 && (
           <View style={styles.buttoncontainer}>
-            <TouchableOpacity style={styles.button} onPress={handleNext}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={handleNext}
+              disabled={!values.speciality}
+            >
               <Text style={styles.buttonText}>Next</Text>
             </TouchableOpacity>
           </View>
