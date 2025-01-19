@@ -31,6 +31,7 @@ export default function Step1() {
                             label="Non-Behaviour"
                             value="Non-Behaviour"
                         />
+                        <Picker.Item label="Therapy" value="Therapy" />
                     </Picker>
                 </View>
 
