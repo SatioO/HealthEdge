@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-
 import { AppointmentForm } from '@/app/services/appointment';
 import Step1 from './steps/Step1';
 import Step2 from './steps/Step2';
@@ -21,7 +20,7 @@ export default function BookAppointment() {
   });
 
   function handleNext() {
-    if (currentStep < 4) {
+    if (values.category && values.speciality) {
       setCurrentStep((step) => step + 1);
     }
   }
@@ -29,6 +28,8 @@ export default function BookAppointment() {
   function handleChange(key: keyof AppointmentForm, value: any) {
     setValues({ ...values, [key]: value });
   }
+
+  const isStepOneComplete = values.category && values.speciality;
 
   return (
     <View

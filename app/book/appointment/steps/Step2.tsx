@@ -2,34 +2,17 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 
-const doctors = [
-    {
-        id: '1',
-        name: 'Dr.name',
-        speciality: 'Speciality',
-        image: require('./dimg1.jpeg'),
-    },
-    {
-        id: '2',
-        name: 'Dr.name',
-        speciality: 'Speciality',
-        image: require('./dimg1.jpeg'),
-    },
-    {
-        id: '3',
-        name: 'Dr.name',
-        speciality: 'Speciality',
-        image: require('./dimg1.jpeg'),
-    },
-    {
-        id: '4',
-        name: 'Dr.name',
-        speciality: 'Speciality',
-        image: require('./dimg1.jpeg'),
-    },
-];
+// 
 export default function Step2({navigation}:{navigation:any}) {
+ const { category, speiality } = route.params;
  const [selectedDoctor, setSelectedDoctor] = useState<any>(null);
+
+const {data: doctors, isLoading, error} = useQuery(
+    ['providers', category, speciality],
+    () =< getProviders(category, speciality),
+    {enabled: !!category && !!speciality}
+);
+
  const handleDoctorSelect = (doctor: { id: string; name: string; speciality: string; image: any; }) =>{
     setSelectedDoctor(doctor);
  };
@@ -42,6 +25,14 @@ const handleNextStep = () => {
     }
 };
 
+if(isLoading){
+    return <Text>Loading Providers...</Text>
+}
+
+if (error){
+    return <Text>Failed to load providers. Please try again later</Text>
+}
+
     return (
         <View>
             <View style={styles.headlineContainer}>
@@ -53,10 +44,13 @@ const handleNextStep = () => {
             <View style={styles.doctorcontainer}>
                 <Text style={styles.title}>Select a Doctor</Text>
                 <ScrollView contentContainerStyle={styles.list}>
-                    {doctors.map((doctor)=>(
+                    {doctors.map((doctor: any)=>(
                         <TouchableOpacity
                             key={doctor.id}
-                            style={styles.card}
+                            style={[styles.card,
+                                selectedDoctor?.id === doctor.id && styles.selectedCard,
+                            ]}
+                            onPress={()=> handleDoctorSelect(doctor)}
                             >
                                 <Image source={doctor.image} style={styles.imgcon}></Image>
                                 <Text style={styles.name}>{doctor.name}</Text>
@@ -132,6 +126,10 @@ const styles = StyleSheet.create({
     label: {
         fontSize: 16,
         marginBottom: 5,
+    },
+    selectedCard:{
+        borderWidth: 2,
+        borderColor: '#4caf50',
     },
 });
 

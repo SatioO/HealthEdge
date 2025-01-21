@@ -14,10 +14,7 @@ type Step1Props = {
 export default function StepOne({
   onChange,
   data,
-}: {
-  data: AppointmentForm;
-  onChange: (property: keyof AppointmentForm, value: any) => void;
-}) {
+}: Step1Props) {
   const categories = useQuery({
     queryKey: ['speciality/category'],
     queryFn: getCategories,
