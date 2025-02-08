@@ -1,15 +1,10 @@
 import { Picker } from '@react-native-picker/picker';
-import { View, Text, StyleSheet, Button } from 'react-native';
-import React, { useState } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import React from 'react';
 import { useQuery } from 'react-query';
-import { Category, getCategories } from '@/app/services/categories';
-import { getSpecialities, Speciality } from '@/app/services/speciality';
+import { getCategories } from '@/app/services/categories';
+import { getSpecialities } from '@/app/services/speciality';
 import { AppointmentForm } from '@/app/services/appointment';
-
-type Step1Props = {
-  data: AppointmentForm;
-  onChange: (property: keyof AppointmentForm, value: any) => void;
-};
 
 export default function StepOne({
   onChange,
