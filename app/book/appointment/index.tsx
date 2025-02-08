@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import { AppointmentForm } from '@/app/services/appointment';
+import { AppointmentForm } from '@/services/appointment';
 import Step1 from './steps/Step1';
 import Step2 from './steps/Step2';
 import Step3 from './steps/Step3';
@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: '50%',
     alignItems: 'center',
-    marginTop: '2%',
+    marginTop: 32,
     marginLeft: '25%',
   },
   button: {

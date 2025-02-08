@@ -1,5 +1,5 @@
-import { AppointmentForm } from '@/app/services/appointment';
-import { getProviders } from '@/app/services/provider';
+import { AppointmentForm } from '@/services/appointment';
+import { getProviders } from '@/services/provider';
 import React from 'react';
 import {
   View,

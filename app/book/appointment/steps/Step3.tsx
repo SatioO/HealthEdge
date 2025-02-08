@@ -2,16 +2,13 @@ import {
   View,
   Text,
   StyleSheet,
-  Modal,
   TouchableOpacity,
-  Image,
-  Button,
+  FlatList,
 } from 'react-native';
 import React, { useState } from 'react';
-import { FlatList } from 'react-native-gesture-handler';
 import { useQuery } from 'react-query';
-import { AppointmentForm } from '@/app/services/appointment';
-import { getAvailableSlots } from '@/app/services/provider';
+import { AppointmentForm } from '@/services/appointment';
+import { getAvailableSlots } from '@/services/provider';
 import { format } from 'date-fns';
 import { formatInTimeZone } from 'date-fns-tz';
 import RNDateTimePicker, {
@@ -25,10 +22,9 @@ type Step3Props = {
 
 export default function Step3(props: Step3Props) {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [showDatePicker, setShowDatePicker] = useState(false);
 
   const availableSlots = useQuery(
-    ['providers', props.data.providerId, 'slots'],
+    ['providers', props.data.providerId, 'slots', selectedDate],
     () =>
       getAvailableSlots(
         props.data.providerId,
@@ -41,7 +37,6 @@ export default function Step3(props: Step3Props) {
     selectedDate?: Date
   ) => {
     const currentDate = selectedDate;
-    setShowDatePicker(false);
     setSelectedDate(currentDate as Date);
   };
 
@@ -55,80 +50,40 @@ export default function Step3(props: Step3Props) {
       </View>
       <View style={styles.dateContainer}>
         <Text style={styles.title}>Select Date</Text>
-        <TouchableOpacity
-          style={styles.datePickerButton}
-          onPress={() => setShowDatePicker(true)}
-        >
-          <Text style={styles.dateText}>
-            {format(selectedDate, 'MMM dd, yyyy')}
-          </Text>
-        </TouchableOpacity>
-        {showDatePicker && (
-          <RNDateTimePicker
-            value={selectedDate}
-            mode={'date'}
-            onChange={handleDateChange}
-          />
-        )}
-        {/* {showDatePicker && (
-          <Modal
-            transparent={true}
-            animationType="slide"
-            visible={showDatePicker}
-          >
-            <View style={styles.modalContainer}>
-              <View style={styles.modalContent}>
-                <FlatList
-                  data={dateOptions}
-                  keyExtractor={(item) => item}
-                  renderItem={({ item }) => (
-                    <TouchableOpacity
-                      style={styles.dateOption}
-                      onPress={() => handleDateChange(item)}
-                    >
-                      <Text style={styles.dateOptionText}>{item}</Text>
-                    </TouchableOpacity>
-                  )}
-                />
-                <TouchableOpacity
-                  style={styles.closeButton}
-                  onPress={() => setShowDatePicker(false)}
-                >
-                  <Text style={styles.closeButtonText}>Close</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </Modal>
-        )} */}
-        <View />
-        <View style={styles.timeSlotContainer}>
-          <Text style={styles.title}>Select Time Slot</Text>
-          <FlatList
-            data={availableSlots.data}
-            keyExtractor={(item) => item.startDateTime}
-            numColumns={4}
-            renderItem={({ item }) => (
-              <TouchableOpacity
+        <RNDateTimePicker
+          themeVariant="light"
+          value={selectedDate}
+          mode={'date'}
+          onChange={handleDateChange}
+        />
+      </View>
+      <View style={styles.timeSlotContainer}>
+        <Text style={styles.title}>Select Time Slot</Text>
+        <FlatList
+          data={availableSlots.data}
+          keyExtractor={(item) => item.startDateTime}
+          numColumns={4}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              style={[
+                styles.timeSlot,
+                props.data.slot === item.startDateTime &&
+                  styles.selectedTimeSlot,
+              ]}
+              onPress={() => props.onChange('slot', item.startDateTime)}
+            >
+              <Text
                 style={[
-                  styles.timeSlot,
+                  styles.timeSlotText,
                   props.data.slot === item.startDateTime &&
-                    styles.selectedTimeSlot,
+                    styles.selectedTimeSlotText,
                 ]}
-                onPress={() => props.onChange('slot', item.startDateTime)}
               >
-                <Text
-                  style={[
-                    styles.timeSlotText,
-                    props.data.slot === item.startDateTime &&
-                      styles.selectedTimeSlotText,
-                  ]}
-                >
-                  {format(item.startDateTime, 'HH:mm a')}
-                </Text>
-              </TouchableOpacity>
-            )}
-          />
-        </View>
+                {format(item.startDateTime, 'HH:mm a')}
+              </Text>
+            </TouchableOpacity>
+          )}
+        />
       </View>
     </View>
   );
@@ -149,7 +104,9 @@ const styles = StyleSheet.create({
     color: '#555',
   },
   dateContainer: {
-    marginBottom: 30,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   datePickerButton: {
     paddingVertical: 10,
@@ -237,7 +194,3 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
-
-function setCurrentStep(arg0: (step: number) => number) {
-  throw new Error('Function not implemented.');
-}

@@ -16,10 +16,11 @@ export const getSpecialities = async (
     );
 
     if (!response.ok) {
-      throw new Error(`Failed to fetch specialities: ${response.statusText}`);
+      return [];
     }
 
-    return await response.json();
+    const data = await response.json();
+    return data;
   } catch (error) {
     console.error('Error fetching specialities:', error);
     throw error;

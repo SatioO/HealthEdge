@@ -1,34 +1,44 @@
-import { Picker } from '@react-native-picker/picker';
 import { View, Text, StyleSheet } from 'react-native';
 import React from 'react';
 import { useQuery } from 'react-query';
-import { getCategories } from '@/app/services/categories';
-import { getSpecialities } from '@/app/services/speciality';
-import { AppointmentForm } from '@/app/services/appointment';
+import { getCategories } from '@/services/categories';
+import { getSpecialities } from '@/services/speciality';
+import { AppointmentForm } from '@/services/appointment';
+import { Dropdown } from 'react-native-element-dropdown';
 
 type Step1Props = {
   data: AppointmentForm;
   onChange: (key: keyof AppointmentForm, value: any) => void;
 };
 
+const RenderEmpty = () => {
+  return (
+    <View style={styles.emptyContainer}>
+      <Text>List Empty!</Text>
+    </View>
+  );
+};
+
 export default function StepOne({ onChange, data }: Step1Props) {
   const categories = useQuery({
     queryKey: ['speciality/category'],
     queryFn: getCategories,
+    initialData: [],
   });
 
   const specialities = useQuery({
     queryKey: ['speciality', data.category],
     queryFn: () => getSpecialities(data.category),
     enabled: !!data.category,
+    initialData: [],
   });
 
-  function handleCategoryChange(value: string) {
-    onChange('category', value);
+  function handleCategoryChange(e: { name: string }) {
+    onChange('category', e.name);
   }
 
-  function handleSpecialityChange(value: string) {
-    onChange('specialityId', Number(value));
+  function handleSpecialityChange(e: { id: string }) {
+    onChange('specialityId', Number(e.id));
   }
 
   return (
@@ -41,39 +51,35 @@ export default function StepOne({ onChange, data }: Step1Props) {
       </View>
       <View style={styles.dropdownContainer}>
         <View>
-          <Text style={styles.label}>Select Category : </Text>
-          <Picker
-            selectedValue={String(data.category)}
-            onValueChange={handleCategoryChange}
-            style={styles.picker}
-          >
-            <Picker.Item label="Select an Option" value="" />
-            {categories.data?.map((category) => (
-              <Picker.Item
-                key={category.name}
-                label={category.name}
-                value={category.name}
-              />
-            ))}
-          </Picker>
+          <Text style={styles.label}>Select Category</Text>
+          <Dropdown
+            containerStyle={styles.container}
+            style={styles.dropdown}
+            value={data.category}
+            data={categories.data ?? []}
+            onChange={handleCategoryChange}
+            labelField={'name'}
+            valueField={'name'}
+            flatListProps={{
+              ListEmptyComponent: <RenderEmpty />,
+            }}
+          />
         </View>
 
         <View>
-          <Text style={styles.label}>Select Speciality : </Text>
-          <Picker
-            selectedValue={String(data.specialityId)}
-            onValueChange={handleSpecialityChange}
-            style={styles.picker}
-          >
-            <Picker.Item label="Select an Option" value="" />
-            {specialities.data?.map((speciality) => (
-              <Picker.Item
-                key={speciality.name}
-                label={speciality.name}
-                value={speciality.id}
-              />
-            ))}
-          </Picker>
+          <Text style={styles.label}>Select Speciality</Text>
+          <Dropdown
+            containerStyle={styles.container}
+            style={styles.dropdown}
+            value={data.specialityId}
+            data={specialities.data ?? []}
+            onChange={handleSpecialityChange}
+            labelField={'name'}
+            valueField={'id'}
+            flatListProps={{
+              ListEmptyComponent: <RenderEmpty />,
+            }}
+          />
         </View>
       </View>
     </View>
@@ -82,7 +88,6 @@ export default function StepOne({ onChange, data }: Step1Props) {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 30,
     backgroundColor: '#f5f5f5',
   },
   headlineContainer: {},
@@ -95,6 +100,17 @@ const styles = StyleSheet.create({
   dropdownContainer: {
     flex: 1,
     rowGap: 30,
+  },
+  emptyContainer: {
+    padding: 16,
+    alignItems: 'center',
+  },
+  dropdown: {
+    marginTop: 4,
+    backgroundColor: '#DDDDDD',
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+    borderRadius: 8,
   },
   title: {
     textAlign: 'center',
@@ -126,12 +142,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#333',
     marginTop: 10,
-  },
-  buttoncontainer: {
-    borderRadius: 50,
-    justifyContent: 'center',
-    display: 'flex',
-    alignItems: 'center',
   },
 });
 
