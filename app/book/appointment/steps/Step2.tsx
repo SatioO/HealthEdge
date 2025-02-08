@@ -1,8 +1,13 @@
 import { AppointmentForm } from '@/app/services/appointment';
 import { getProviders } from '@/app/services/provider';
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
 import { useQuery } from 'react-query';
 
 type Step2Props = {
@@ -12,8 +17,8 @@ type Step2Props = {
 
 export default function Step2(props: Step2Props) {
   const providers = useQuery({
-    queryKey: ['speciality/provider', props.data.speciality],
-    queryFn: () => getProviders(Number(props.data.speciality)),
+    queryKey: ['speciality/provider', props.data.specialityId],
+    queryFn: () => getProviders(Number(props.data.specialityId)),
   });
 
   return (
@@ -32,9 +37,10 @@ export default function Step2(props: Step2Props) {
               key={provider.userId}
               style={[
                 styles.card,
-                props.data.provider === provider.userId && styles.selectedCard,
+                props.data.providerId === provider.userId &&
+                  styles.selectedCard,
               ]}
-              onPress={() => props.onChange('provider', provider.userId)}
+              onPress={() => props.onChange('providerId', provider.userId)}
             >
               {/* <Image source={doctor.image} style={styles.imgcon}></Image> */}
               <Text style={styles.name}>{provider.fullName}</Text>

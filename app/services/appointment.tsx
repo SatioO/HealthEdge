@@ -1,5 +1,6 @@
 export type AppointmentForm = {
   category: string;
-  speciality: string;
-  provider: number;
+  specialityId: number;
+  providerId: number;
+  slot: string;
 };

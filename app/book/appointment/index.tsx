@@ -16,17 +16,18 @@ export default function BookAppointment() {
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [values, setValues] = useState<AppointmentForm>({
     category: '',
-    speciality: '',
-    provider: 0,
+    specialityId: 0,
+    providerId: 0,
+    slot: '',
   });
 
   function handleNext() {
-    if (currentStep === 1 && values.speciality) {
+    if (currentStep === 1 && values.specialityId) {
       setCurrentStep(currentStep + 1);
       return;
     }
 
-    if (currentStep === 2 && values.provider) {
+    if (currentStep === 2 && values.providerId) {
       setCurrentStep(currentStep + 1);
       return;
     }
@@ -50,7 +51,7 @@ export default function BookAppointment() {
       <ScrollView style={styles.mainContent}>
         {currentStep === 1 && <Step1 data={values} onChange={handleChange} />}
         {currentStep === 2 && <Step2 data={values} onChange={handleChange} />}
-        {currentStep === 3 && <Step3 />}
+        {currentStep === 3 && <Step3 data={values} onChange={handleChange} />}
         {currentStep === 4 && (
           <Step4 route={undefined} navigation={undefined} />
         )}
@@ -69,7 +70,7 @@ export default function BookAppointment() {
             <TouchableOpacity
               style={styles.button}
               onPress={handleNext}
-              disabled={!values.speciality}
+              disabled={!values.specialityId}
             >
               <Text style={styles.buttonText}>Next</Text>
             </TouchableOpacity>

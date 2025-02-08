@@ -1,5 +1,4 @@
 import { BASE_URL } from '.';
-import { Category } from './categories';
 
 export type Speciality = {
   id: number;
