@@ -1,37 +1,36 @@
+import { AppointmentForm } from '@/app/services/appointment';
+import { getProviders } from '@/app/services/provider';
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import { useQuery } from 'react-query';
 
-// 
-export default function Step2({navigation}:{navigation:any}) {
- const { category, speiality } = route.params;
- const [selectedDoctor, setSelectedDoctor] = useState<any>(null);
-
-const {data: doctors, isLoading, error} = useQuery(
-    ['providers', category, speciality],
-    () =< getProviders(category, speciality),
-    {enabled: !!category && !!speciality}
-);
-
- const handleDoctorSelect = (doctor: { id: string; name: string; speciality: string; image: any; }) =>{
-    setSelectedDoctor(doctor);
- };
-
-const handleNextStep = () => {
-    if (selectedDoctor){
-        navigation.navigate('FinalStep',{doctor: selectedDoctor});
-    }else{
-        alert('Please select a doctor before proceeding');
-    }
+//
+type Step2Props = {
+    data: AppointmentForm;
 };
+export default function Step2(props: Step2Props) {
+    const [selectedDoctor, setSelectedDoctor] = useState<any>(null);
+    const providers = useQuery({
+        queryKey: ['speciality/provider', props.data.speciality],
+        queryFn: () => getProviders(Number(props.data.speciality)),
+    });
+    console.log(providers);
+    const handleDoctorSelect = (doctor: {
+        id: string;
+        name: string;
+        speciality: string;
+        image: any;
+    }) => {
+        setSelectedDoctor(doctor);
+    };
 
-if(isLoading){
-    return <Text>Loading Providers...</Text>
-}
-
-if (error){
-    return <Text>Failed to load providers. Please try again later</Text>
-}
+    const handleNextStep = () => {
+        if (selectedDoctor) {
+        } else {
+            alert('Please select a doctor before proceeding');
+        }
+    };
 
     return (
         <View>
@@ -44,7 +43,7 @@ if (error){
             <View style={styles.doctorcontainer}>
                 <Text style={styles.title}>Select a Doctor</Text>
                 <ScrollView contentContainerStyle={styles.list}>
-                    {doctors.map((doctor: any)=>(
+                    {/* {doctors.map((doctor: any)=>(
                         <TouchableOpacity
                             key={doctor.id}
                             style={[styles.card,
@@ -56,7 +55,7 @@ if (error){
                                 <Text style={styles.name}>{doctor.name}</Text>
                                 <Text style={styles.speciality}>{doctor.speciality}</Text>
                         </TouchableOpacity>
-                    ))}
+                    ))} */}
                 </ScrollView>
             </View>
         </View>
@@ -127,7 +126,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         marginBottom: 5,
     },
-    selectedCard:{
+    selectedCard: {
         borderWidth: 2,
         borderColor: '#4caf50',
     },

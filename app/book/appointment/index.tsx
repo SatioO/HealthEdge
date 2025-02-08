@@ -13,79 +13,71 @@ import Step3 from './steps/Step3';
 import Step4 from './steps/Step4';
 
 export default function BookAppointment() {
-    const [currentStep, setCurrentStep] = useState<number>(1);
-    const [values, setValues] = useState<AppointmentForm>({
-        category: '',
-        speciality: '',
-        provider: '',
-    });
+  const [currentStep, setCurrentStep] = useState<number>(1);
+  const [values, setValues] = useState<AppointmentForm>({
+    category: '',
+    speciality: '',
+    provider: '',
+  });
 
-    function handleNext() {
-        if (values.category && values.speciality) {
-            setCurrentStep((step) => step + 1);
-        }
+  function handleNext() {
+    if (currentStep === 1 && values.speciality) {
+      setCurrentStep(currentStep + 1);
     }
 
     function handleChange(key: keyof AppointmentForm, value: any) {
         setValues({ ...values, [key]: value });
     }
 
-    const isStepOneComplete = values.category && values.speciality;
-
-    return (
-        <View
-            style={{
-                flex: 1,
-                backgroundColor: '#FFF',
-                flexDirection: 'column',
-            }}
-        >
-            <View style={styles.navbar}>
-                <TouchableOpacity style={styles.navItem}></TouchableOpacity>
-            </View>
-            <ScrollView style={styles.mainContent}>
-                {currentStep === 1 && (
-                    <Step1 data={values} onChange={handleChange} />
-                )}
-                {currentStep === 2 && <Step2 navigation={undefined} />}
-                {currentStep === 3 && <Step3 />}
-                {currentStep === 4 && (
-                    <Step4 route={undefined} navigation={undefined} />
-                )}
-                {currentStep > 1 && currentStep !== 4 && (
-                    <View style={styles.buttoncontainer}>
-                        <TouchableOpacity
-                            style={styles.button}
-                            onPress={() => setCurrentStep((prev) => prev - 1)}
-                        >
-                            <Text style={styles.buttonText}>Back</Text>
-                        </TouchableOpacity>
-                    </View>
-                )}
-                {currentStep < 3 && (
-                    <View style={styles.buttoncontainer}>
-                        <TouchableOpacity
-                            style={styles.button}
-                            onPress={handleNext}
-                            disabled={!values.speciality}
-                        >
-                            <Text style={styles.buttonText}>Next</Text>
-                        </TouchableOpacity>
-                    </View>
-                )}
-                {currentStep === 3 && (
-                    <View style={styles.buttoncontainer}>
-                        <TouchableOpacity
-                            style={styles.button}
-                            onPress={handleNext}
-                        >
-                            <Text style={styles.buttonText}>Book</Text>
-                        </TouchableOpacity>
-                    </View>
-                )}
-            </ScrollView>
-        </View>
-    );
+  return (
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: '#FFF',
+        flexDirection: 'column',
+      }}
+    >
+      <View style={styles.navbar}>
+        <TouchableOpacity style={styles.navItem}></TouchableOpacity>
+      </View>
+      <ScrollView style={styles.mainContent}>
+        {currentStep === 1 && <Step1 data={values} onChange={handleChange} />}
+        {currentStep === 2 && <Step2 data={values} />}
+        {currentStep === 3 && <Step3 />}
+        {currentStep === 4 && (
+          <Step4 route={undefined} navigation={undefined} />
+        )}
+        {currentStep > 1 && currentStep !== 4 && (
+          <View style={styles.buttoncontainer}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => setCurrentStep((prev) => prev - 1)}
+            >
+              <Text style={styles.buttonText}>Back</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+        {currentStep < 3 && (
+          <View style={styles.buttoncontainer}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={handleNext}
+              disabled={!values.speciality}
+            >
+              <Text style={styles.buttonText}>Next</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+        {currentStep === 3 && (
+          <View style={styles.buttoncontainer}>
+            <TouchableOpacity style={styles.button} onPress={handleNext}>
+              <Text style={styles.buttonText}>Book</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      </ScrollView>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
