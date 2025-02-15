@@ -38,10 +38,15 @@ const SignInScreen = () => {
       await auth.login(values.email, values.password);
       router.push('./dashboard');
     } catch (error) {
-      Alert.alert(
-        'Login Failed',
-        'Invalid credentials or network error. Please try again.'
-      );
+      if (Platform.OS === 'web') {
+        alert('Invalid credentials. Please try again.');
+      } else {
+        Alert.alert('Login Failed', 'Invalid credentials. Please try again.');
+      }
+      control._reset({
+        email: '',
+        password: '',
+      });
     }
   };
 

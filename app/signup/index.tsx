@@ -48,28 +48,39 @@ const SignupScreen = () => {
         administrativeSex: data.gender,
         maritalStatus: data.maritalStatus,
       });
-      Alert.alert(
-        'Success!',
-        'Your account has been created successfully. Please proceed to login.',
-        [
-          {
-            text: 'OK',
-            onPress: () => {
-              router.replace('./login');
+      if (Platform.OS === 'web') {
+        alert(
+          'Your account has been created successfully. Please proceed to login.'
+        );
+        router.replace('./login');
+      } else {
+        Alert.alert(
+          'Success!',
+          'Your account has been created successfully. Please proceed to login.',
+          [
+            {
+              text: 'OK',
+              onPress: () => {
+                router.replace('./login');
+              },
             },
-          },
-        ]
-      );
+          ]
+        );
+      }
     } catch (err) {
-      Alert.alert(
-        'Signup Failed',
-        'There was an error creating your account. Please try again.',
-        [
-          {
-            text: 'OK',
-          },
-        ]
-      );
+      if (Platform.OS === 'web') {
+        alert('There was an error creating your account. Please try again.');
+      } else {
+        Alert.alert(
+          'Signup Failed',
+          'There was an error creating your account. Please try again.',
+          [
+            {
+              text: 'OK',
+            },
+          ]
+        );
+      }
     }
   };
 
