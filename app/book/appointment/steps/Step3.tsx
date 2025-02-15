@@ -43,10 +43,6 @@ export default function Step3(props: Step3Props) {
   return (
     <View>
       <View style={styles.headlineContainer}>
-        <Text style={styles.title}>Book Your Appointment</Text>
-        <Text style={styles.subtitle}>
-          Find the right provider for your needs.
-        </Text>
       </View>
       <View style={styles.dateContainer}>
         <Text style={styles.title}>Select Date</Text>
@@ -107,6 +103,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    padding: 20,
   },
   datePickerButton: {
     paddingVertical: 10,

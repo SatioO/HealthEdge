@@ -30,7 +30,7 @@ const SignInScreen = () => {
   });
 
   const onSubmit = () => {
-    router.push('/dashboard');
+    router.push('./dashboard');
   };
 
   return (

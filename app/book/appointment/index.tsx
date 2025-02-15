@@ -55,18 +55,17 @@ export default function BookAppointment() {
         {currentStep === 4 && (
           <Step4 route={undefined} navigation={undefined} />
         )}
+        <View style={styles.buttonWrapper}>
         {currentStep > 1 && currentStep !== 4 && (
-          <View style={styles.buttoncontainer}>
             <TouchableOpacity
               style={styles.button}
               onPress={() => setCurrentStep((prev) => prev - 1)}
             >
               <Text style={styles.buttonText}>Back</Text>
             </TouchableOpacity>
-          </View>
+    
         )}
         {currentStep < 3 && (
-          <View style={styles.buttoncontainer}>
             <TouchableOpacity
               style={styles.button}
               onPress={handleNext}
@@ -74,15 +73,13 @@ export default function BookAppointment() {
             >
               <Text style={styles.buttonText}>Next</Text>
             </TouchableOpacity>
-          </View>
         )}
         {currentStep === 3 && (
-          <View style={styles.buttoncontainer}>
             <TouchableOpacity style={styles.button} onPress={handleNext}>
               <Text style={styles.buttonText}>Book</Text>
             </TouchableOpacity>
-          </View>
         )}
+        </View>
       </ScrollView>
     </View>
   );
@@ -90,7 +87,7 @@ export default function BookAppointment() {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 30,
+    padding: 10,
     backgroundColor: '#f5f5f5',
   },
   headlineContainer: {},
@@ -98,7 +95,7 @@ const styles = StyleSheet.create({
     flex: 1,
     rowGap: 30,
     backgroundColor: '#f5f5f5',
-    padding: 30,
+    padding: 10,
   },
   dropdownContainer: {
     flex: 1,
@@ -141,22 +138,26 @@ const styles = StyleSheet.create({
     color: '#333',
     marginTop: 10,
   },
-  buttoncontainer: {
+  buttonWrapper: {
+    position: 'absolute',
+    bottom: -350,
+    left: 0,
+    right: 0,
     flexDirection: 'row',
-    borderRadius: 50,
-    justifyContent: 'space-between',
-    width: '50%',
-    alignItems: 'center',
-    marginTop: 32,
-    marginLeft: '25%',
+    alignContent: 'flex-end',
+    justifyContent: 'space-evenly',
+    paddingHorizontal: 20,
+    backgroundColor: '#fff',
+    paddingVertical: 10,
   },
   button: {
-    width: '48%',
-    backgroundColor: '#4caf50',
-    paddingVertical: 10,
+    marginHorizontal: 10,
     flex: 1,
+    backgroundColor: "#4caf50",
+    paddingVertical: 12,
     borderRadius: 50,
     alignItems: 'center',
+    alignContent: 'flex-end',
     justifyContent: 'center',
   },
   buttonText: {

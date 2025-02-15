@@ -24,13 +24,11 @@ export default function Step2(props: Step2Props) {
   return (
     <View>
       <View style={styles.headlineContainer}>
-        <Text style={styles.title}>Book Your Appointment</Text>
+        <Text style={styles.title}>Select a Doctor</Text>
         <Text style={styles.subtitle}>
-          Find the right provider for your needs.
         </Text>
       </View>
       <View style={styles.doctorcontainer}>
-        <Text style={styles.title}>Select a Doctor</Text>
         <ScrollView contentContainerStyle={styles.list}>
           {providers.data?.map((provider) => (
             <TouchableOpacity
@@ -55,17 +53,18 @@ export default function Step2(props: Step2Props) {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 30,
+    padding: 10,
     backgroundColor: '#f5f5f5',
   },
   headlineContainer: {},
   doctorcontainer: {
     flex: 1,
-    padding: 20,
+    padding: 30,
+    paddingBottom: 200,
     backgroundColor: '#FFFFFF',
   },
   mainContent: {
-    padding: 30,
+    padding: 20,
   },
   list: {
     flexDirection: 'row',
@@ -78,7 +77,7 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 20,
     alignItems: 'center',
-    width: '40%',
+    width: '50%',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,

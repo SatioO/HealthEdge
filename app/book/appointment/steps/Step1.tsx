@@ -90,7 +90,10 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#f5f5f5',
   },
-  headlineContainer: {},
+  headlineContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
   mainContent: {
     flex: 1,
     rowGap: 30,
@@ -100,6 +103,7 @@ const styles = StyleSheet.create({
   dropdownContainer: {
     flex: 1,
     rowGap: 30,
+    marginTop: 90,
   },
   emptyContainer: {
     padding: 16,
@@ -111,6 +115,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 16,
     borderRadius: 8,
+    borderColor: 'green',
   },
   title: {
     textAlign: 'center',
@@ -125,11 +130,12 @@ const styles = StyleSheet.create({
     color: '#555',
   },
   dropDownContainer: {
-    marginBottom: 20,
+    marginBottom: 50,
   },
   label: {
     fontSize: 16,
     marginBottom: 5,
+    borderColor: 'green',
   },
   picker: {
     height: 50,
