@@ -38,75 +38,90 @@ export default function BookAppointment() {
   }
 
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: '#FFF',
-        flexDirection: 'column',
-      }}
-    >
-      <View style={styles.navbar}>
-        <TouchableOpacity style={styles.navItem}></TouchableOpacity>
-      </View>
-      <ScrollView style={styles.mainContent}>
-        {currentStep === 1 && <Step1 data={values} onChange={handleChange} />}
-        {currentStep === 2 && <Step2 data={values} onChange={handleChange} />}
-        {currentStep === 3 && <Step3 data={values} onChange={handleChange} />}
-        {currentStep === 4 && (
-          <Step4 route={undefined} navigation={undefined} />
-        )}
-        <View style={styles.buttonWrapper}>
-        {currentStep > 1 && currentStep !== 4 && (
+    <View style={styles.mainContent}>
+      <View style={styles.container}>
+        <View style={styles.navbar}>{/* Navbar content */}</View>
+
+        <View style={styles.content}>
+          <ScrollView>
+            {currentStep === 1 && (
+              <Step1 data={values} onChange={handleChange} />
+            )}
+            {currentStep === 2 && (
+              <Step2 data={values} onChange={handleChange} />
+            )}
+            {currentStep === 3 && (
+              <Step3 data={values} onChange={handleChange} />
+            )}
+            {currentStep === 4 && (
+              <Step4 route={undefined} navigation={undefined} />
+            )}
+          </ScrollView>
+        </View>
+
+        <View style={styles.buttonContainer}>
+          {currentStep > 1 && currentStep !== 4 && (
             <TouchableOpacity
               style={styles.button}
               onPress={() => setCurrentStep((prev) => prev - 1)}
             >
               <Text style={styles.buttonText}>Back</Text>
             </TouchableOpacity>
-    
-        )}
-        {currentStep < 3 && (
-            <TouchableOpacity
-              style={styles.button}
-              onPress={handleNext}
-              disabled={!values.specialityId}
-            >
+          )}
+          {currentStep < 3 && (
+            <TouchableOpacity style={styles.button} onPress={handleNext}>
               <Text style={styles.buttonText}>Next</Text>
             </TouchableOpacity>
-        )}
-        {currentStep === 3 && (
+          )}
+          {currentStep === 3 && (
             <TouchableOpacity style={styles.button} onPress={handleNext}>
               <Text style={styles.buttonText}>Book</Text>
             </TouchableOpacity>
-        )}
+          )}
         </View>
-      </ScrollView>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 10,
-    backgroundColor: '#f5f5f5',
-  },
-  headlineContainer: {},
   mainContent: {
     flex: 1,
-    rowGap: 30,
-    backgroundColor: '#f5f5f5',
-    padding: 10,
+    backgroundColor: '#fff',
   },
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+  },
+  navbar: {
+    height: 60,
+    backgroundColor: '#f8f9fa',
+    borderBottomWidth: 1,
+    borderBottomColor: '#e9ecef',
+    justifyContent: 'center',
+    paddingHorizontal: 16,
+  },
+  content: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: '#fff',
+  },
+  buttonContainer: {
+    padding: 16,
+    backgroundColor: '#fff',
+    borderTopWidth: 1,
+    borderTopColor: '#e9ecef',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+
+  headlineContainer: {},
+
   dropdownContainer: {
     flex: 1,
     rowGap: 30,
   },
-  navbar: {
-    flexDirection: 'row',
-    padding: 30,
-    backgroundColor: '#085578',
-  },
-  navItem: {},
   title: {
     textAlign: 'center',
     fontSize: 24,
@@ -138,22 +153,10 @@ const styles = StyleSheet.create({
     color: '#333',
     marginTop: 10,
   },
-  buttonWrapper: {
-    position: 'absolute',
-    bottom: -350,
-    left: 0,
-    right: 0,
-    flexDirection: 'row',
-    alignContent: 'flex-end',
-    justifyContent: 'space-evenly',
-    paddingHorizontal: 20,
-    backgroundColor: '#fff',
-    paddingVertical: 10,
-  },
   button: {
     marginHorizontal: 10,
     flex: 1,
-    backgroundColor: "#4caf50",
+    backgroundColor: '#4caf50',
     paddingVertical: 12,
     borderRadius: 50,
     alignItems: 'center',
