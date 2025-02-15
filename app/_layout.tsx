@@ -12,6 +12,7 @@ import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import AuthProvider from '@/components/providers/AuthProvider';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -37,19 +38,26 @@ export default function RootLayout() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Stack>
-          <Stack.Screen name="login/index" options={{ headerShown: false }} />
-          <Stack.Screen name="signup/index" options={{ headerShown: false }} />
-          <Stack.Screen name="dashboard/index" />
-          <Stack.Screen
-            name="book/appointment/index"
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen name="+not-found" />
-        </Stack>
-        <StatusBar style="auto" />
-      </ThemeProvider>
+      <AuthProvider>
+        <ThemeProvider
+          value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
+        >
+          <Stack>
+            <Stack.Screen name="login/index" options={{ headerShown: false }} />
+            <Stack.Screen
+              name="signup/index"
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen name="dashboard/index" />
+            <Stack.Screen
+              name="book/appointment/index"
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen name="+not-found" />
+          </Stack>
+          <StatusBar style="auto" />
+        </ThemeProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

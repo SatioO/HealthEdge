@@ -8,16 +8,20 @@ import {
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
+  Alert,
 } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { emailValidation, passwordValidation } from '@/utils/validationRules';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
+import { login } from '@/services/auth';
+import { useAuth } from '@/components/providers/AuthProvider';
 
 const BACKGROUND_IMAGE =
   'https://cdn.pixabay.com/photo/2021/10/11/17/37/doctor-6701410_1280.jpg';
 
 const SignInScreen = () => {
+  const auth = useAuth();
   const {
     control,
     handleSubmit,
@@ -29,8 +33,17 @@ const SignInScreen = () => {
     },
   });
 
-  const onSubmit = () => {
-    router.push('./dashboard');
+  const onSubmit = async () => {
+    try {
+      const values = control._formValues;
+      await auth.login(values.email, values.password);
+      router.push('./dashboard');
+    } catch (error) {
+      Alert.alert(
+        'Login Failed',
+        'Invalid credentials or network error. Please try again.'
+      );
+    }
   };
 
   return (
