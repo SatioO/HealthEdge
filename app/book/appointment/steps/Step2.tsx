@@ -9,6 +9,7 @@ import {
   ScrollView,
 } from 'react-native';
 import { useQuery } from 'react-query';
+import { Image } from 'expo-image';
 
 type Step2Props = {
   data: AppointmentForm;
@@ -21,68 +22,102 @@ export default function Step2(props: Step2Props) {
     queryFn: () => getProviders(Number(props.data.specialityId)),
   });
 
+  if (providers.isLoading) {
+    return <Text>Loading providers...</Text>;
+  }
+
+  if (providers.error) {
+    return <Text>Error loading providers</Text>;
+  }
+
+  if (providers.data?.length === 0) {
+    return (
+      <View style={styles.noProvidersContainer}>
+        <Image
+          source={require('@/assets/images/no-doctor.svg')}
+          style={{
+            width: 100,
+            height: 100,
+            marginBottom: 8,
+          }}
+          contentFit="contain"
+        />
+        <Text style={styles.noProvidersTitle}>No Doctors Available</Text>
+        <Text style={styles.noProvidersMessage}>
+          We currently don't have any healthcare providers available for this
+          specialty. Please try selecting a different specialty or check back
+          later.
+        </Text>
+      </View>
+    );
+  }
+  if (!providers.data || providers.data.length === 0) {
+    return (
+      <View style={styles.noProvidersContainer}>
+        <Text style={styles.noProvidersTitle}>No Doctors Available</Text>
+        <Text style={styles.noProvidersMessage}>
+          We currently don't have any healthcare providers available for this
+          specialty. Please try selecting a different specialty or check back
+          later.
+        </Text>
+      </View>
+    );
+  }
+
   return (
     <View>
       <View style={styles.headlineContainer}>
         <Text style={styles.title}>Select a Doctor</Text>
         <Text style={styles.subtitle}>
+          Choose your preferred healthcare provider
         </Text>
       </View>
-      <View style={styles.doctorcontainer}>
-        <ScrollView contentContainerStyle={styles.list}>
-          {providers.data?.map((provider) => (
-            <TouchableOpacity
-              key={provider.userId}
-              style={[
-                styles.card,
-                props.data.providerId === provider.userId &&
-                  styles.selectedCard,
-              ]}
-              onPress={() => props.onChange('providerId', provider.userId)}
-            >
-              {/* <Image source={doctor.image} style={styles.imgcon}></Image> */}
-              <Text style={styles.name}>{provider.fullName}</Text>
-              <Text style={styles.speciality}>{provider.speciality}</Text>
-            </TouchableOpacity>
+      <ScrollView
+        horizontal={false}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.gridContainer}
+      >
+        <View style={styles.row}>
+          {providers.data.map((provider) => (
+            <View style={styles.column} key={provider.userId}>
+              <TouchableOpacity
+                style={[
+                  styles.card,
+                  props.data.providerId === provider.userId &&
+                    styles.selectedCard,
+                ]}
+                onPress={() => props.onChange('providerId', provider.userId)}
+              >
+                <Image
+                  source={{
+                    uri: 'https://www.shutterstock.com/image-photo/profile-picture-smiling-young-caucasian-600nw-1954278664.jpg',
+                  }}
+                  style={styles.imgcon}
+                />
+                <View style={styles.providerInfo}>
+                  <Text style={styles.name}>
+                    Dr. {provider.name.givenName} {provider.name.familyName}
+                  </Text>
+                  <Text style={styles.speciality}>{provider.speciality}</Text>
+                  <Text style={styles.description} numberOfLines={4}>
+                    Board certified cardiologist specializing in interventional
+                    cardiology. Expert in cardiac catheterization and stent
+                    procedures.
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </View>
           ))}
-        </ScrollView>
-      </View>
+        </View>
+      </ScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 10,
-    backgroundColor: '#f5f5f5',
-  },
-  headlineContainer: {},
-  doctorcontainer: {
-    flex: 1,
-    padding: 30,
-    paddingBottom: 200,
-    backgroundColor: '#FFFFFF',
-  },
-  mainContent: {
-    padding: 20,
-  },
-  list: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-  },
-  card: {
-    backgroundColor: '#DDD',
-    borderRadius: 10,
-    padding: 10,
-    marginBottom: 20,
-    alignItems: 'center',
-    width: '50%',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
-    elevation: 5,
+  headlineContainer: {
+    padding: 16,
+    backgroundColor: '#fff',
   },
   imgcon: {
     width: 80,
@@ -119,6 +154,54 @@ const styles = StyleSheet.create({
   selectedCard: {
     borderWidth: 2,
     borderColor: '#4caf50',
+  },
+  providerInfo: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  description: {
+    fontSize: 12,
+    color: '#666',
+    textAlign: 'center',
+    marginTop: 5,
+  },
+  gridContainer: {
+    padding: 16,
+  },
+  row: {
+    flexDirection: 'row',
+    marginHorizontal: -8,
+  },
+  column: {
+    flex: 1,
+    padding: 8,
+  },
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+    alignItems: 'center',
+  },
+  noProvidersContainer: {
+    flex: 1,
+    padding: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  noProvidersTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  noProvidersMessage: {
+    fontSize: 16,
+    color: '#666',
+    textAlign: 'center',
   },
 });
 
