@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import { useQuery } from 'react-query';
 import { Image } from 'expo-image';
@@ -23,14 +24,18 @@ export default function Step2(props: Step2Props) {
   });
 
   if (providers.isLoading) {
-    return <Text>Loading providers...</Text>;
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
   }
 
   if (providers.error) {
     return <Text>Error loading providers</Text>;
   }
 
-  if (providers.data?.length === 0) {
+  if (!providers.data || providers.data.length === 0) {
     return (
       <View style={styles.noProvidersContainer}>
         <Image
@@ -42,18 +47,6 @@ export default function Step2(props: Step2Props) {
           }}
           contentFit="contain"
         />
-        <Text style={styles.noProvidersTitle}>No Doctors Available</Text>
-        <Text style={styles.noProvidersMessage}>
-          We currently don't have any healthcare providers available for this
-          specialty. Please try selecting a different specialty or check back
-          later.
-        </Text>
-      </View>
-    );
-  }
-  if (!providers.data || providers.data.length === 0) {
-    return (
-      <View style={styles.noProvidersContainer}>
         <Text style={styles.noProvidersTitle}>No Doctors Available</Text>
         <Text style={styles.noProvidersMessage}>
           We currently don't have any healthcare providers available for this
@@ -90,7 +83,7 @@ export default function Step2(props: Step2Props) {
               >
                 <Image
                   source={{
-                    uri: 'https://www.shutterstock.com/image-photo/profile-picture-smiling-young-caucasian-600nw-1954278664.jpg',
+                    uri: provider.photoUrl,
                   }}
                   style={styles.imgcon}
                 />
@@ -99,11 +92,11 @@ export default function Step2(props: Step2Props) {
                     Dr. {provider.name.givenName} {provider.name.familyName}
                   </Text>
                   <Text style={styles.speciality}>{provider.speciality}</Text>
-                  <Text style={styles.description} numberOfLines={4}>
-                    Board certified cardiologist specializing in interventional
-                    cardiology. Expert in cardiac catheterization and stent
-                    procedures.
-                  </Text>
+                  {provider.bio && (
+                    <Text style={styles.description} numberOfLines={4}>
+                      {provider.bio}
+                    </Text>
+                  )}
                 </View>
               </TouchableOpacity>
             </View>
@@ -202,6 +195,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#666',
     textAlign: 'center',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

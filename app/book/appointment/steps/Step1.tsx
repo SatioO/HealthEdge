@@ -5,6 +5,7 @@ import { getCategories } from '@/services/categories';
 import { getSpecialities } from '@/services/speciality';
 import { AppointmentForm } from '@/services/appointment';
 import { Dropdown } from 'react-native-element-dropdown';
+import { Image } from 'expo-image';
 
 type Step1Props = {
   data: AppointmentForm;
@@ -43,12 +44,27 @@ export default function StepOne({ onChange, data }: Step1Props) {
 
   return (
     <View>
-      <View style={styles.headlineContainer}>
-        <Text style={styles.title}>Book Your Appointment</Text>
+      <View style={styles.heroContainer}>
+        <Image
+          accessible={true}
+          accessibilityLabel="Doctor consultation illustration"
+          source={{
+            uri: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPHBhdGggZD0iTTEwMCA1MEMxMjcuNjE0IDUwIDE1MCA3Mi4zODU4IDE1MCAxMDBDMTUwIDEyNy42MTQgMTI3LjYxNCAxNTAgMTAwIDE1MEM3Mi4zODU4IDE1MCA1MCAxMjcuNjE0IDUwIDEwMEM1MCA3Mi4zODU4IDcyLjM4NTggNTAgMTAwIDUwWiIgZmlsbD0iI0U2RUZGQSIvPgogIDxwYXRoIGQ9Ik0xMTAgODBDMTIxLjA0NiA4MCAxMzAgODguOTU0MyAxMzAgMTAwQzEzMCAxMTEuMDQ2IDEyMS4wNDYgMTIwIDExMCAxMjBDOTguOTU0MyAxMjAgOTAgMTExLjA0NiA5MCAxMDBDOTAgODguOTU0MyA5OC45NTQzIDgwIDExMCA4MFoiIGZpbGw9IiM0Q0FGNTAiLz4KICA8cGF0aCBkPSJNOTAgOTBDMTAxLjA0NiA5MCAxMTAgOTguOTU0MyAxMTAgMTEwQzExMCAxMjEuMDQ2IDEwMS4wNDYgMTMwIDkwIDEzMEM3OC45NTQzIDEzMCA3MCAxMjEuMDQ2IDcwIDExMEM3MCA5OC45NTQzIDc4Ljk1NDMgOTAgOTAgOTBaIiBmaWxsPSIjODFDNzg0Ii8+Cjwvc3ZnPg==',
+          }}
+          style={{
+            width: 200,
+            height: 200,
+          }}
+          contentFit="contain"
+        />
+        <Text style={styles.title}>Find Your Healthcare Provider</Text>
         <Text style={styles.subtitle}>
-          Find the right provider for your needs.
+          Connect with experienced specialists who can provide the care you
+          need. Select your preferred medical category and specialty to get
+          started.
         </Text>
       </View>
+
       <View style={styles.dropdownContainer}>
         <View>
           <Text style={styles.label}>Select Category</Text>
@@ -96,14 +112,12 @@ const styles = StyleSheet.create({
   },
   mainContent: {
     flex: 1,
-    rowGap: 30,
     backgroundColor: '#f5f5f5',
-    padding: 30,
   },
   dropdownContainer: {
     flex: 1,
     rowGap: 30,
-    marginTop: 90,
+    marginTop: 10,
   },
   emptyContainer: {
     padding: 16,
@@ -149,8 +163,7 @@ const styles = StyleSheet.create({
     color: '#333',
     marginTop: 10,
   },
+  heroContainer: {
+    alignItems: 'center',
+  },
 });
-
-function setCurrentStep(arg0: (step: number) => number) {
-  throw new Error('Function not implemented.');
-}
