@@ -52,7 +52,7 @@ const SignupScreen = () => {
         alert(
           'Your account has been created successfully. Please proceed to login.'
         );
-        router.replace('./login');
+        router.replace('/login');
       } else {
         Alert.alert(
           'Success!',
@@ -61,7 +61,7 @@ const SignupScreen = () => {
             {
               text: 'OK',
               onPress: () => {
-                router.replace('./login');
+                router.replace('/login');
               },
             },
           ]

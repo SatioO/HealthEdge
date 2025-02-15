@@ -36,7 +36,7 @@ const SignInScreen = () => {
     try {
       const values = control._formValues;
       await auth.login(values.email, values.password);
-      router.push('./dashboard');
+      router.push('/dashboard');
     } catch (error) {
       if (Platform.OS === 'web') {
         alert('Invalid credentials. Please try again.');

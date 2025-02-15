@@ -32,10 +32,7 @@ export default function Step3(props: Step3Props) {
       )
   );
 
-  const handleDateChange = (
-    event: DateTimePickerEvent,
-    selectedDate?: Date
-  ) => {
+  const handleDateChange = (_: DateTimePickerEvent, selectedDate?: Date) => {
     const currentDate = selectedDate;
     setSelectedDate(currentDate as Date);
   };
@@ -43,43 +40,56 @@ export default function Step3(props: Step3Props) {
   return (
     <View>
       <View style={styles.headlineContainer}>
+        <Text style={styles.title}>Schedule Your Appointment</Text>
+        <Text style={styles.subtitle}>Choose your preferred date and time</Text>
       </View>
-      <View style={styles.dateContainer}>
-        <Text style={styles.title}>Select Date</Text>
-        <RNDateTimePicker
-          themeVariant="light"
-          value={selectedDate}
-          mode={'date'}
-          onChange={handleDateChange}
-        />
-      </View>
-      <View style={styles.timeSlotContainer}>
-        <Text style={styles.title}>Select Time Slot</Text>
-        <FlatList
-          data={availableSlots.data}
-          keyExtractor={(item) => item.startDateTime}
-          numColumns={4}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              style={[
-                styles.timeSlot,
-                props.data.slot === item.startDateTime &&
-                  styles.selectedTimeSlot,
-              ]}
-              onPress={() => props.onChange('slot', item.startDateTime)}
-            >
-              <Text
-                style={[
-                  styles.timeSlotText,
-                  props.data.slot === item.startDateTime &&
-                    styles.selectedTimeSlotText,
-                ]}
-              >
-                {format(item.startDateTime, 'HH:mm a')}
-              </Text>
-            </TouchableOpacity>
-          )}
-        />
+
+      <View style={styles.contentContainer}>
+        <View style={styles.dateContainer}>
+          <RNDateTimePicker
+            themeVariant="light"
+            value={selectedDate}
+            mode={'date'}
+            onChange={handleDateChange}
+            style={styles.datePicker}
+          />
+        </View>
+
+        <View style={styles.timeSlotContainer}>
+          <Text style={styles.sectionTitle}>Select Time Slot</Text>
+          <View style={styles.timeSlotListContainer}>
+            <FlatList
+              data={availableSlots.data}
+              keyExtractor={(item) => item.startDateTime}
+              numColumns={3}
+              contentContainerStyle={styles.timeSlotList}
+              renderItem={({ item }) => (
+                <View style={styles.timeSlotColumn}>
+                  <TouchableOpacity
+                    style={[
+                      styles.timeSlot,
+                      props.data.slot === item.startDateTime &&
+                        styles.selectedTimeSlot,
+                      !item.available && styles.disabledTimeSlot,
+                    ]}
+                    disabled={!item.available}
+                    onPress={() => props.onChange('slot', item.startDateTime)}
+                  >
+                    <Text
+                      style={[
+                        styles.timeSlotText,
+                        props.data.slot === item.startDateTime &&
+                          styles.selectedTimeSlotText,
+                      ]}
+                    >
+                      {format(item.startDateTime, 'HH:mm a')}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+            />
+          </View>
+        </View>
       </View>
     </View>
   );
@@ -96,14 +106,11 @@ const styles = StyleSheet.create({
   subtitle: {
     textAlign: 'center',
     fontSize: 16,
-    marginBottom: 20,
     color: '#555',
   },
   dateContainer: {
-    display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
   },
   datePickerButton: {
     paddingVertical: 10,
@@ -142,6 +149,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#333',
   },
+  disabledTimeSlot: {
+    backgroundColor: '#DDDDDD',
+    color: '#FFF',
+  },
   closeButton: {
     marginTop: 20,
     padding: 15,
@@ -167,7 +178,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   selectedTimeSlot: {
-    backgroundColor: '#085578',
+    backgroundColor: '#4CAF50',
     borderColor: '#085578',
   },
   timeSlotText: {
@@ -189,5 +200,27 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  timeSlotColumn: {
+    flex: 1,
+    padding: 4,
+  },
+  contentContainer: {
+    padding: 16,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  datePicker: {
+    height: 120,
+    marginTop: 10,
+  },
+  timeSlotList: {
+    paddingHorizontal: 8,
+  },
+  timeSlotListContainer: {
+    flex: 1,
   },
 });

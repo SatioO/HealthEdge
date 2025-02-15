@@ -19,7 +19,7 @@ export type Provider = {
 export type AvailableSlot = {
   startDateTime: string;
   endDateTime: string;
-  isAvailable: boolean;
+  available: boolean;
 };
 
 export async function getProviders(specialityId: number): Promise<Provider[]> {

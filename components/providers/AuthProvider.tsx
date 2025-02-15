@@ -5,6 +5,7 @@ import {
   login,
   logout,
 } from '@/services/auth';
+import { router } from 'expo-router';
 
 type AuthContextType = {
   isAuthenticated: boolean;
@@ -49,16 +50,19 @@ export default function AuthProvider({
         ) {
           setUserRole(authData.user.roles[0]);
         }
+        router.replace('/dashboard');
       } else {
         setIsAuthenticated(false);
         setUser(null);
         setUserRole(null);
+        router.replace('/login');
       }
     } catch (error) {
       console.error('Error checking auth status:', error);
       setIsAuthenticated(false);
       setUser(null);
       setUserRole(null);
+      router.replace('/login');
     }
   }, []);
 

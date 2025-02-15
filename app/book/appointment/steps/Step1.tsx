@@ -69,6 +69,7 @@ export default function StepOne({ onChange, data }: Step1Props) {
         <View>
           <Text style={styles.label}>Select Category</Text>
           <Dropdown
+            placeholder="Select one"
             containerStyle={styles.container}
             style={styles.dropdown}
             value={data.category}
@@ -85,6 +86,7 @@ export default function StepOne({ onChange, data }: Step1Props) {
         <View>
           <Text style={styles.label}>Select Speciality</Text>
           <Dropdown
+            placeholder="Select one"
             containerStyle={styles.container}
             style={styles.dropdown}
             value={data.specialityId}

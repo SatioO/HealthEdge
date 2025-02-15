@@ -6,11 +6,17 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import { AppointmentForm } from '@/services/appointment';
+import { router, Stack } from 'expo-router';
+import {
+  AppointmentForm,
+  AppointmentResponseDTO,
+  createAppointment,
+} from '@/services/appointment';
 import Step1 from './steps/Step1';
 import Step2 from './steps/Step2';
 import Step3 from './steps/Step3';
 import Step4 from './steps/Step4';
+import { formatInTimeZone } from 'date-fns-tz';
 
 export default function BookAppointment() {
   const [currentStep, setCurrentStep] = useState<number>(1);
@@ -20,8 +26,10 @@ export default function BookAppointment() {
     providerId: 0,
     slot: '',
   });
+  const [appointmentDetails, setAppointmentDetails] =
+    useState<AppointmentResponseDTO | null>(null);
 
-  function handleNext() {
+  async function handleNext() {
     if (currentStep === 1 && values.specialityId) {
       setCurrentStep(currentStep + 1);
       return;
@@ -31,6 +39,23 @@ export default function BookAppointment() {
       setCurrentStep(currentStep + 1);
       return;
     }
+
+    if (currentStep === 3 && values.slot) {
+      try {
+        const response = await createAppointment({
+          dateTime: formatInTimeZone(
+            new Date(values.slot),
+            'UTC',
+            "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+          ),
+          providerId: values.providerId,
+          specialityId: values.specialityId,
+        });
+        setAppointmentDetails(response);
+        setCurrentStep(currentStep + 1);
+        return;
+      } catch (err) {}
+    }
   }
 
   function handleChange(key: keyof AppointmentForm, value: any) {
@@ -38,49 +63,87 @@ export default function BookAppointment() {
   }
 
   return (
-    <View style={styles.mainContent}>
-      <View style={styles.container}>
-        <View style={styles.navbar}>{/* Navbar content */}</View>
+    <>
+      <Stack.Screen
+        options={{
+          title: '',
+          headerStyle: {
+            backgroundColor: '#4CAF50',
+          },
+          headerTintColor: '#FFFFFF',
+          headerTitleStyle: {
+            fontWeight: '500',
+            fontSize: 16,
+          },
+          headerShadowVisible: false,
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => router.back()}
+              style={{
+                padding: 8,
+                marginLeft: 8,
+                borderRadius: 8,
+              }}
+            >
+              <Text
+                style={{ color: '#FFFFFF', fontSize: 16, fontWeight: 'bold' }}
+              >
+                Back
+              </Text>
+            </TouchableOpacity>
+          ),
+        }}
+      />
+      <View style={styles.mainContent}>
+        <View style={styles.container}>
+          <View style={styles.content}>
+            <ScrollView>
+              {currentStep === 1 && (
+                <Step1 data={values} onChange={handleChange} />
+              )}
+              {currentStep === 2 && (
+                <Step2 data={values} onChange={handleChange} />
+              )}
+              {currentStep === 3 && (
+                <Step3 data={values} onChange={handleChange} />
+              )}
+              {currentStep === 4 && appointmentDetails && (
+                <Step4 data={appointmentDetails} />
+              )}
+            </ScrollView>
+          </View>
 
-        <View style={styles.content}>
-          <ScrollView>
-            {currentStep === 1 && (
-              <Step1 data={values} onChange={handleChange} />
+          <View style={styles.buttonContainer}>
+            {currentStep > 1 && currentStep !== 4 && (
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => setCurrentStep((prev) => prev - 1)}
+              >
+                <Text style={styles.buttonText}>Back</Text>
+              </TouchableOpacity>
             )}
-            {currentStep === 2 && (
-              <Step2 data={values} onChange={handleChange} />
+            {currentStep < 3 && (
+              <TouchableOpacity style={styles.button} onPress={handleNext}>
+                <Text style={styles.buttonText}>Next</Text>
+              </TouchableOpacity>
             )}
             {currentStep === 3 && (
-              <Step3 data={values} onChange={handleChange} />
+              <TouchableOpacity style={styles.button} onPress={handleNext}>
+                <Text style={styles.buttonText}>Book</Text>
+              </TouchableOpacity>
             )}
             {currentStep === 4 && (
-              <Step4 route={undefined} navigation={undefined} />
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => router.replace('/dashboard')}
+              >
+                <Text style={styles.buttonText}>Go Home</Text>
+              </TouchableOpacity>
             )}
-          </ScrollView>
-        </View>
-
-        <View style={styles.buttonContainer}>
-          {currentStep > 1 && currentStep !== 4 && (
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => setCurrentStep((prev) => prev - 1)}
-            >
-              <Text style={styles.buttonText}>Back</Text>
-            </TouchableOpacity>
-          )}
-          {currentStep < 3 && (
-            <TouchableOpacity style={styles.button} onPress={handleNext}>
-              <Text style={styles.buttonText}>Next</Text>
-            </TouchableOpacity>
-          )}
-          {currentStep === 3 && (
-            <TouchableOpacity style={styles.button} onPress={handleNext}>
-              <Text style={styles.buttonText}>Book</Text>
-            </TouchableOpacity>
-          )}
+          </View>
         </View>
       </View>
-    </View>
+    </>
   );
 }
 
