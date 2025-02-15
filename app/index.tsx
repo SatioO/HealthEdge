@@ -12,6 +12,12 @@ export default function Root() {
         <Link href="/book/appointment" style={styles.link}>
           <ThemedText type="link">Book Appointment</ThemedText>
         </Link>
+        <Link href="/login" style={styles.link}>
+          <ThemedText type="link">Login</ThemedText>
+        </Link>
+        <Link href="/signup" style={styles.link}>
+          <ThemedText type="link">Signup</ThemedText>
+        </Link>
       </ThemedView>
     </>
   );

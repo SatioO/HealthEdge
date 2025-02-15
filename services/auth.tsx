@@ -7,13 +7,27 @@ type AuthParams = {
 };
 
 interface NameDTO {
-  firstName: string;
-  lastName: string;
+  familyName: string;
+  middleName: string;
+  givenName: string;
 }
 
 enum UserStatus {
-  ACTIVE = 'ACTIVE',
-  INACTIVE = 'INACTIVE',
+  ACTIVE = 'Active',
+  INACTIVE = 'Inactive',
+}
+
+enum AdministrativeSex {
+  MALE = 'male',
+  FEMALE = 'female',
+}
+
+interface CreatePatientRequestDTO {
+  name: NameDTO;
+  password: string;
+  email: string;
+  administrativeSex: AdministrativeSex;
+  maritalStatus?: MaritalStatus;
 }
 
 export interface JwtUserResponseDTO {
@@ -23,6 +37,41 @@ export interface JwtUserResponseDTO {
   name: NameDTO;
   email: string;
   status: UserStatus;
+}
+
+export enum MaritalStatus {
+  S = 'S',
+  M = 'M',
+  D = 'D',
+  W = 'W',
+  U = 'U',
+}
+
+export const MaritalStatusDescriptions: Record<MaritalStatus, string> = {
+  [MaritalStatus.S]: 'Single',
+  [MaritalStatus.M]: 'Married',
+  [MaritalStatus.D]: 'Divorced',
+  [MaritalStatus.W]: 'Widow/Seperated',
+  [MaritalStatus.U]: 'Unknown',
+};
+
+// Helper function to get description (equivalent to Java's getDescription())
+export const getMaritalStatusDescription = (status: MaritalStatus): string => {
+  return MaritalStatusDescriptions[status];
+};
+
+export interface UserDTO {
+  userId: number;
+  username: string;
+  name: NameDTO;
+  email: string;
+  dob: string; // Using string for ISO date format
+  roles: string[];
+  administrativeSex: AdministrativeSex;
+  maritalStatus: MaritalStatus; // We'll need to define this enum
+  status: UserStatus;
+  createdAt: string; // Using string for ISO date format
+  updatedAt: string; // Using string for ISO date format
 }
 
 export interface JwtResponseDTO {
@@ -126,4 +175,28 @@ const login = async (params: AuthParams): Promise<JwtResponseDTO> => {
   }
 };
 
-export { login };
+const signup = async (
+  params: CreatePatientRequestDTO
+): Promise<JwtResponseDTO> => {
+  try {
+    const response = await fetch(`${BASE_URL}/patients`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(params),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Patient signup failed: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error during patient signup:', error);
+    throw error;
+  }
+};
+
+export { login, signup };
