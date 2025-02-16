@@ -8,16 +8,19 @@ import {
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
+  Alert,
 } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { emailValidation, passwordValidation } from '@/utils/validationRules';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
+import { useAuth } from '@/components/providers/AuthProvider';
 
 const BACKGROUND_IMAGE =
   'https://cdn.pixabay.com/photo/2021/10/11/17/37/doctor-6701410_1280.jpg';
 
 const SignInScreen = () => {
+  const auth = useAuth();
   const {
     control,
     handleSubmit,
@@ -29,8 +32,22 @@ const SignInScreen = () => {
     },
   });
 
-  const onSubmit = () => {
-    router.push('/dashboard');
+  const onSubmit = async () => {
+    try {
+      const values = control._formValues;
+      await auth.login(values.email, values.password);
+      router.push('/dashboard');
+    } catch (error) {
+      if (Platform.OS === 'web') {
+        alert('Invalid credentials. Please try again.');
+      } else {
+        Alert.alert('Login Failed', 'Invalid credentials. Please try again.');
+      }
+      control._reset({
+        email: '',
+        password: '',
+      });
+    }
   };
 
   return (
@@ -48,7 +65,17 @@ const SignInScreen = () => {
             style={styles.container}
           >
             <View style={styles.formContainer}>
-              <Text style={styles.title}>Sign In</Text>
+              <View style={styles.titleContainer}>
+                <Text style={styles.mainTitle}>Welcome to ReachSpecialist</Text>
+                <Text style={styles.subtitle}>
+                  Your Online Healthcare Partner
+                </Text>
+                <Text style={styles.description}>
+                  Sign in to access your personalized healthcare dashboard,
+                  manage appointments, and connect with your healthcare
+                  providers.
+                </Text>
+              </View>
 
               <View style={styles.inputContainer}>
                 <Controller
@@ -111,6 +138,12 @@ const SignInScreen = () => {
               <Text style={styles.privacyText}>
                 Secure & HIPAA Compliant Platform
               </Text>
+              <View style={styles.signupContainer}>
+                <Text style={styles.signupText}>Don't have an account?</Text>
+                <TouchableOpacity onPress={() => router.push('/signup')}>
+                  <Text style={styles.signupLink}>Sign up</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </KeyboardAvoidingView>
         </SafeAreaView>
@@ -122,6 +155,7 @@ const SignInScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginTop: 24,
   },
   backgroundImage: {
     ...StyleSheet.absoluteFillObject,
@@ -132,7 +166,6 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     flex: 1,
-    justifyContent: 'center',
     paddingHorizontal: 20,
   },
   title: {
@@ -184,6 +217,44 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     backgroundColor: '#0553',
+  },
+  signupContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 15,
+  },
+  signupText: {
+    color: '#7f8c8d',
+    marginRight: 5,
+  },
+  signupLink: {
+    color: '#007AFF',
+    fontWeight: '600',
+  },
+  titleContainer: {
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 30,
+  },
+  mainTitle: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 12,
+    textAlign: 'center',
+  },
+  subtitle: {
+    fontSize: 20,
+    fontWeight: '600',
+    color: '#555',
+    marginBottom: 16,
+    textAlign: 'center',
+  },
+  description: {
+    fontSize: 16,
+    color: '#666',
+    textAlign: 'center',
+    lineHeight: 24,
   },
 });
 
