@@ -49,6 +49,7 @@ export default function RootLayout() {
               options={{ headerShown: false }}
             />
             <Stack.Screen name="dashboard/index" />
+            <Stack.Screen name="room/index" />
             <Stack.Screen name="book/appointment/index" />
             <Stack.Screen name="+not-found" />
           </Stack>

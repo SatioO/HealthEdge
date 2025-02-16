@@ -7,9 +7,9 @@ import { StyleSheet } from 'react-native';
 export default function Root() {
   return (
     <>
-      <Stack.Screen options={{ title: 'Welcome' }} />
+      <Stack.Screen options={{}} />
       <ThemedView style={styles.container}>
-        <Link href="/book/appointment" style={styles.link}>
+        {/* <Link href="/book/appointment" style={styles.link}>
           <ThemedText type="link">Book Appointment</ThemedText>
         </Link>
         <Link href="/login" style={styles.link}>
@@ -17,7 +17,7 @@ export default function Root() {
         </Link>
         <Link href="/signup" style={styles.link}>
           <ThemedText type="link">Signup</ThemedText>
-        </Link>
+        </Link> */}
       </ThemedView>
     </>
   );

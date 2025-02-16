@@ -5,11 +5,16 @@ import {
   TouchableOpacity,
   ScrollView,
   View,
+  Alert,
+  Platform,
 } from 'react-native';
 import { useQuery } from 'react-query';
 import { router, Stack } from 'expo-router';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { getAppointments } from '@/services/appointment';
+import { Image } from 'expo-image';
+import { logout } from '@/services/auth';
+import * as WebBrowser from 'expo-web-browser';
 
 export default function DashboardScreen() {
   const { user } = useAuth();
@@ -18,31 +23,81 @@ export default function DashboardScreen() {
     getAppointments
   );
 
-  // const today = new Date();
-  // const todayAppointment = appointments?.find((apt) => {
-  //   const aptDate = new Date(apt.slot);
-  //   return aptDate.toDateString() === today.toDateString();
-  // });
+  const isWithin5Minutes = (appointmentTime: string) => {
+    const now = new Date();
+    const appointmentDate = new Date(appointmentTime);
+    const timeDifference = appointmentDate.getTime() - now.getTime();
+    const minutesDifference = Math.floor(timeDifference / (1000 * 60));
+    return minutesDifference >= 0 && minutesDifference <= 5;
+  };
 
-  // const upcomingAppointments = appointments?.filter((apt) => {
-  //   const aptDate = new Date(apt.slot);
-  //   return aptDate > today;
-  // });
+  const today = new Date();
+  const upcomingAppointment = appointments?.find((apt) => {
+    const aptDate = new Date(apt.dateTime);
+    return aptDate.toDateString() === today.toDateString();
+  });
+
+  const canJoinAppointment =
+    upcomingAppointment && isWithin5Minutes(upcomingAppointment.dateTime);
+
+  async function handleJoin() {
+    // if (!canJoinAppointment) {
+    //   if (Platform.OS === 'web') {
+    //     alert(
+    //       'You can only join the appointment when there are 5 minutes or less remaining until the appointment time.'
+    //     );
+    //   } else {
+    //     Alert.alert(
+    //       'Cannot Join Yet',
+    //       'You can only join the appointment when there are 5 minutes or less remaining until the appointment time.'
+    //     );
+    //   }
+
+    //   return;
+    // }
+
+    const websiteUrl = upcomingAppointment?.provider?.websiteUrl;
+    if (websiteUrl) {
+      await WebBrowser.openBrowserAsync(websiteUrl);
+    }
+  }
+
+  async function logoutUser() {
+    await logout();
+    router.replace('/login');
+  }
 
   return (
     <>
       <Stack.Screen
         options={{
-          title: 'Dashboard',
+          title: '',
           headerStyle: {
             backgroundColor: '#4CAF50',
           },
           headerTintColor: '#FFFFFF',
           headerTitleStyle: {
-            fontWeight: '600',
-            fontSize: 20,
+            fontWeight: '500',
+            fontSize: 16,
           },
           headerShadowVisible: false,
+          headerLeft: () => <></>,
+          headerRight: () => (
+            <TouchableOpacity
+              onPress={logoutUser}
+              style={{
+                padding: 8,
+                marginLeft: 8,
+                borderRadius: 8,
+              }}
+            >
+              <Text
+                style={{ color: '#FFFFFF', fontSize: 16, fontWeight: 'bold' }}
+              >
+                Logout
+              </Text>
+            </TouchableOpacity>
+          ),
         }}
       />
       <ScrollView style={styles.container}>
@@ -68,15 +123,35 @@ export default function DashboardScreen() {
           </TouchableOpacity>
         </View>
 
+        {upcomingAppointment && (
+          <View style={styles.todayCard}>
+            <Text style={styles.cardTitle}>Upcoming Appointment</Text>
+            <Text style={styles.cardText}>
+              Provider: Dr. {upcomingAppointment.provider.name.givenName}{' '}
+              {upcomingAppointment.provider.name.familyName}
+            </Text>
+            <Text style={styles.cardText}>
+              Time:{' '}
+              {new Date(upcomingAppointment.dateTime).toLocaleTimeString()}
+            </Text>
+            <Text style={styles.cardText}>
+              Specialty: {upcomingAppointment.speciality.name}
+            </Text>
+            <TouchableOpacity style={styles.joinButton} onPress={handleJoin}>
+              <Text style={styles.joinButtonText}>Join Appointment</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+
         <View style={styles.upcomingSection}>
           <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Upcoming Appointments</Text>
+            <Text style={styles.sectionTitle}>All Appointments</Text>
             <Text style={styles.appointmentCount}>
               {appointments?.length || 0} scheduled
             </Text>
           </View>
 
-          {appointments?.map((appointment) => (
+          {appointments?.slice(0, 5).map((appointment) => (
             <View key={appointment.id} style={styles.appointmentCard}>
               <View style={styles.appointmentHeader}>
                 <View style={styles.dateContainer}>
@@ -102,13 +177,19 @@ export default function DashboardScreen() {
                 <View style={styles.divider} />
                 <View style={styles.appointmentDetails}>
                   <View style={styles.providerRow}>
-                    <Text style={styles.providerName}>
-                      Dr. {appointment.provider.name.givenName}{' '}
-                      {appointment.provider.name.familyName}
-                    </Text>
-                    <Text style={styles.specialtyText}>
-                      {appointment.speciality.name}
-                    </Text>
+                    <Image
+                      source={{ uri: appointment.provider.photoUrl }}
+                      style={styles.providerImage}
+                    />
+                    <View style={styles.providerInfo}>
+                      <Text style={styles.providerName}>
+                        Dr. {appointment.provider.name.givenName}{' '}
+                        {appointment.provider.name.familyName}
+                      </Text>
+                      <Text style={styles.specialtyText}>
+                        {appointment.speciality.name}
+                      </Text>
+                    </View>
                   </View>
                 </View>
               </View>
@@ -269,6 +350,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   providerRow: {
+    flexDirection: 'row',
     marginBottom: 8,
   },
   providerName: {
@@ -297,5 +379,14 @@ const styles = StyleSheet.create({
   emptyStateText: {
     color: '#666',
     fontSize: 16,
+  },
+  providerImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 4,
+    marginRight: 12,
+  },
+  providerInfo: {
+    flex: 1,
   },
 });

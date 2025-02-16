@@ -61,7 +61,7 @@ export const getAppointments = async (): Promise<AppointmentResponseDTO[]> => {
   try {
     const auth = await getStoredAuthData();
     const response = await fetch(
-      `${BASE_URL}/patients/${auth?.user.userId}/appointments`,
+      `${BASE_URL}/patients/${auth?.user.userId}/appointments?sort=dateTime`,
       {
         headers: {
           'Content-Type': 'application/json',

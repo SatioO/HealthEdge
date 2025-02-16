@@ -12,8 +12,9 @@ export type Provider = {
   speciality: string;
   userId: number;
   username: string;
-  bio: string;
-  photoUrl: string;
+  bio?: string;
+  photoUrl?: string;
+  websiteUrl?: string;
 };
 
 export type AvailableSlot = {
