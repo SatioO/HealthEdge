@@ -1,12 +1,13 @@
 import React from 'react';
 import { Stack, useLocalSearchParams } from 'expo-router';
-import { ScrollView, Text, StyleSheet } from 'react-native';
+import { ScrollView, Text, StyleSheet, View } from 'react-native';
 import { useQuery } from 'react-query';
 import { getPatientDetails } from '@/services/patient';
 
 export default function MyDetails() {
     const { userId } = useLocalSearchParams();
     const { data: patient } = useQuery(['patient', userId], getPatientDetails);
+    console.log(patient)
     return (
         <>
             <Stack.Screen
@@ -24,11 +25,10 @@ export default function MyDetails() {
                 }}
             ></Stack.Screen>
             <ScrollView style={styles.container}>
-                <Text style={styles.userid}>
-                    {patient?.name.givenName}
-                    {patient?.name.familyName}
-                </Text>
-                <Text></Text>
+                <View style={styles.card}>
+                    <Text style={styles.cardTitle}> Name : {patient?.name.givenName}{''}{patient?.name?.familyName}</Text>
+                    <Text style={styles.cardInfo}>Username : {patient?.username}</Text>
+                </View>
             </ScrollView>
         </>
     );
@@ -36,10 +36,26 @@ export default function MyDetails() {
 
 
 const styles = StyleSheet.create({
-    container:{
+    card: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        margin: 50,
+    },
+    container: {
         backgroundColor: '#ffffff',
     },
-    userid:{
-        color: 'green',
+    cardTitle: {
+        flex: 1,
+        color: 'black',
+        fontWeight: 'bold',
     },
-})
+    photo: {
+        height: 100,
+        width: 100,
+    },
+    cardInfo: {
+        textAlign: 'center',
+    },
+});

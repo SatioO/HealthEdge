@@ -13,6 +13,7 @@ import { AppointmentResponseDTO, getAppointments } from '@/services/appointment'
 import { Image } from 'expo-image';
 import { JwtResponseDTO, logout, UserDTO } from '@/services/auth';
 import * as WebBrowser from 'expo-web-browser';       
+import ProviderDetails from '../myprofile/provider';
 
 export default function DashboardScreen() {
     const { user } = useAuth();
@@ -80,8 +81,23 @@ export default function DashboardScreen() {
     }
 
     function onHandle(){
-        console.log("patient details captured");
-        router.push('./myprofile');
+        if(isProvider){
+            const provider = user?.userId;
+            router.push({
+                pathname: './myprofile/provider',
+                params: {
+                    id: provider 
+                }
+            });
+        }else{
+            const patient = user?.userId;
+            router.push({
+                pathname: './myprofile/patient',
+                params: {
+                    userId: patient
+                }
+            })
+        }
     }
 
     async function logoutUser() {
