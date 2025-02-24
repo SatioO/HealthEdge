@@ -163,61 +163,42 @@ export default function DashboardScreen() {
       />
 
       <ScrollView style={styles.container}>
-        {isProvider && (
-          <View style={styles.scheduleButtonContainer}>
-            <TouchableOpacity
-              style={styles.scheduleButton}
-              onPress={handleJoin}
-              activeOpacity={0.7}
+        <View style={styles.scheduleButtonContainer}>
+          <TouchableOpacity
+            style={styles.scheduleButton}
+            onPress={
+              isProvider ? handleJoin : () => router.push('/book/appointment')
+            }
+            activeOpacity={0.7}
+          >
+            <View
+              style={[
+                styles.scheduleButtonContent,
+                {
+                  flex: 1,
+                  justifyContent: 'space-between',
+                  paddingHorizontal: 8,
+                },
+              ]}
             >
-              <View
-                style={[
-                  styles.scheduleButtonContent,
-                  {
-                    flex: 1,
-                    justifyContent: 'space-between',
-                    paddingHorizontal: 8,
-                  },
-                ]}
-              >
-                <View style={styles.scheduleButtonTextContainer}>
-                  <Text style={styles.scheduleButtonTitle}>
-                    Join Consultation Room
-                  </Text>
-                  <Text style={styles.scheduleButtonSubtext}>
-                    Start your virtual consultation with patients
-                  </Text>
-                </View>
-                <View style={[styles.scheduleButtonIconContainer]}>
-                  <Text style={styles.scheduleButtonIcon}>→</Text>
-                </View>
+              <View style={styles.scheduleButtonTextContainer}>
+                <Text style={styles.scheduleButtonTitle}>
+                  {isProvider
+                    ? 'Join Consultation Room'
+                    : 'Schedule Appointment'}
+                </Text>
+                <Text style={styles.scheduleButtonSubtext}>
+                  {isProvider
+                    ? 'Start your virtual consultation with patients'
+                    : 'Book your next visit with a healthcare provider'}
+                </Text>
               </View>
-            </TouchableOpacity>
-          </View>
-        )}
-        {!isProvider && (
-          <View style={styles.scheduleButtonContainer}>
-            <TouchableOpacity
-              style={styles.scheduleButton}
-              onPress={() => router.push('/book/appointment')}
-              activeOpacity={0.7}
-            >
-              <View style={styles.scheduleButtonContent}>
-                <View style={styles.scheduleButtonTextContainer}>
-                  <Text style={styles.scheduleButtonTitle}>
-                    Schedule Appointment
-                  </Text>
-                  <Text style={styles.scheduleButtonSubtext}>
-                    Book your next visit with a healthcare provider
-                  </Text>
-                </View>
-                <View style={styles.scheduleButtonIconContainer}>
-                  <Text style={styles.scheduleButtonIcon}>→</Text>
-                </View>
+              <View style={styles.scheduleButtonIconContainer}>
+                <Text style={styles.scheduleButtonIcon}>→</Text>
               </View>
-            </TouchableOpacity>
-          </View>
-        )}
+            </View>
+          </TouchableOpacity>
+        </View>
 
         {upcomingAppointment && (
           <View style={styles.todayCard}>
