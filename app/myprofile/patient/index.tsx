@@ -7,7 +7,7 @@ import { getPatientDetails } from '@/services/patient';
 export default function MyDetails() {
     const { userId } = useLocalSearchParams();
     const { data: patient } = useQuery(['patient', userId], getPatientDetails);
-    console.log(patient)
+    console.log(patient);
     return (
         <>
             <Stack.Screen
@@ -26,14 +26,20 @@ export default function MyDetails() {
             ></Stack.Screen>
             <ScrollView style={styles.container}>
                 <View style={styles.card}>
-                    <Text style={styles.cardTitle}> Name : {patient?.name.givenName}{''}{patient?.name?.familyName}</Text>
-                    <Text style={styles.cardInfo}>Username : {patient?.username}</Text>
+                    <Text style={styles.cardTitle}>
+                        {' '}
+                        Name : {patient?.name.givenName}
+                        {''}
+                        {patient?.name?.familyName}
+                    </Text>
+                    <Text style={styles.cardInfo}>
+                        Username : {patient?.username}
+                    </Text>
                 </View>
             </ScrollView>
         </>
     );
 }
-
 
 const styles = StyleSheet.create({
     card: {
