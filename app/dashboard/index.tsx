@@ -83,7 +83,7 @@ export default function DashboardScreen() {
   function onViewProviderProfile(appointment: AppointmentResponseDTO) {
     const provider = appointment.provider;
     router.push({
-      pathname: './profile',
+      pathname: './profile/provider',
       params: {
         id: provider.userId,
       },
@@ -91,23 +91,13 @@ export default function DashboardScreen() {
   }
 
   function onViewMyProfile() {
-    if (isProvider) {
-      const provider = user?.userId;
-      router.push({
-        pathname: './myprofile/provider',
-        params: {
-          id: provider,
-        },
-      });
-    } else {
-      const patient = user?.userId;
-      router.push({
-        pathname: './myprofile/patient',
-        params: {
-          userId: patient,
-        },
-      });
-    }
+    const userId = user?.userId;
+    router.push({
+      pathname: `./profile/${isProvider ? 'provider' : 'patient'}`,
+      params: {
+        id: userId,
+      },
+    });
   }
 
   async function logoutUser() {
