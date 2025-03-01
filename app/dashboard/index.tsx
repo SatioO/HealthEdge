@@ -31,6 +31,7 @@ export default function DashboardScreen() {
 
   const { data: providerDetails } = useQuery(
     ['providers', user?.userId],
+    
     () => getProviderDetails(Number(user?.userId)),
     { enabled: isProvider }
   );
@@ -106,223 +107,307 @@ export default function DashboardScreen() {
   }
 
   return (
-    <>
-      <Stack.Screen
-        options={{
-          title: '',
-          headerStyle: {
-            backgroundColor: '#4CAF50',
-          },
-          headerTintColor: '#FFFFFF',
-          headerTitleStyle: {
-            fontWeight: '500',
-            fontSize: 16,
-          },
-          headerShadowVisible: false,
-          headerLeft: () => (
-            <TouchableOpacity
-              style={{
-                padding: 8,
-                marginRight: 8,
-                borderRadius: 8,
-              }}
-              onPress={onViewMyProfile}
-            >
-              <Text
-                style={{
-                  color: '#FFFFFF',
-                  fontSize: 16,
-                  fontWeight: 'bold',
-                }}
-              >
-                MyProfile
-              </Text>
-            </TouchableOpacity>
-          ),
-          headerRight: () => (
-            <TouchableOpacity
-              onPress={logoutUser}
-              style={{
-                padding: 8,
-                marginLeft: 8,
-                borderRadius: 8,
-              }}
-            >
-              <Text
-                style={{
-                  color: '#FFFFFF',
-                  fontSize: 16,
-                  fontWeight: 'bold',
-                }}
-              >
-                Logout
-              </Text>
-            </TouchableOpacity>
-          ),
-        }}
-      />
-
-      <ScrollView style={styles.container}>
-        <View style={styles.scheduleButtonContainer}>
-          <TouchableOpacity
-            style={styles.scheduleButton}
-            onPress={
-              isProvider ? handleJoin : () => router.push('/book/appointment')
-            }
-            activeOpacity={0.7}
-          >
-            <View
-              style={[
-                styles.scheduleButtonContent,
-                {
-                  flex: 1,
-                  justifyContent: 'space-between',
-                  paddingHorizontal: 8,
-                },
-              ]}
-            >
-              <View style={styles.scheduleButtonTextContainer}>
-                <Text style={styles.scheduleButtonTitle}>
-                  {isProvider
-                    ? 'Join Consultation Room'
-                    : 'Schedule Appointment'}
-                </Text>
-                <Text style={styles.scheduleButtonSubtext}>
-                  {isProvider
-                    ? 'Start your virtual consultation with patients'
-                    : 'Book your next visit with a healthcare provider'}
-                </Text>
-              </View>
-              <View style={styles.scheduleButtonIconContainer}>
-                <Text style={styles.scheduleButtonIcon}>→</Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-        </View>
-
-        {upcomingAppointment && (
-          <View style={styles.todayCard}>
-            <Text style={styles.cardTitle}>Upcoming Appointment</Text>
-            {!isProvider && (
-              <Text style={styles.cardText}>
-                Provider: Dr. {upcomingAppointment.provider.name.givenName}{' '}
-                {upcomingAppointment.provider.name.familyName}
-              </Text>
-            )}
-            {isProvider && (
-              <Text style={styles.cardText}>
-                Patient: {upcomingAppointment.patient.name.givenName}{' '}
-                {upcomingAppointment.patient.name.familyName}
-              </Text>
-            )}
-            <Text style={styles.cardText}>
-              Time:{' '}
-              {new Date(upcomingAppointment.dateTime).toLocaleTimeString()}
-            </Text>
-            {!isProvider && (
-              <Text style={styles.cardText}>
-                Specialty: {upcomingAppointment.speciality.name}
-              </Text>
-            )}
-            {!isProvider && (
-              <TouchableOpacity style={styles.joinButton} onPress={handleJoin}>
-                <Text style={styles.joinButtonText}>Join Appointment</Text>
-              </TouchableOpacity>
-            )}
-          </View>
-        )}
-
-        <View style={styles.upcomingSection}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>All Appointments</Text>
-            <Text style={styles.appointmentCount}>
-              {appointments?.length || 0} scheduled
-            </Text>
-          </View>
-
-          {appointments?.slice(0, 5).map((appointment) => (
-            <View key={appointment.id} style={styles.appointmentCard}>
-              <View style={styles.appointmentHeader}>
-                <View style={styles.dateContainer}>
-                  <Text style={styles.dateText}>
-                    {new Date(appointment.dateTime).toLocaleDateString(
-                      'en-US',
-                      {
-                        month: 'short',
-                        day: 'numeric',
-                      }
-                    )}
-                  </Text>
-                  <Text style={styles.timeText}>
-                    {new Date(appointment.dateTime).toLocaleTimeString(
-                      'en-US',
-                      {
-                        hour: 'numeric',
-                        minute: '2-digit',
-                      }
-                    )}
-                  </Text>
-                </View>
-                <View style={styles.divider} />
-                {!isProvider ? (
-                  <View style={styles.appointmentDetails}>
-                    <TouchableOpacity
-                      style={styles.appointmentDetails}
-                      onPress={() => onViewProviderProfile(appointment)}
-                    >
-                      <View style={styles.providerRow}>
-                        <Image
-                          source={{
-                            uri: appointment.provider.photoUrl,
+      <>
+          <Stack.Screen
+              options={{
+                  title: '',
+                  headerStyle: {
+                      backgroundColor: '#4CAF50',
+                  },
+                  headerTintColor: '#FFFFFF',
+                  headerTitleStyle: {
+                      fontWeight: '500',
+                      fontSize: 16,
+                  },
+                  headerShadowVisible: false,
+                  headerLeft: () => (
+                      <TouchableOpacity
+                          style={{
+                              padding: 8,
+                              marginRight: 8,
+                              borderRadius: 8,
                           }}
-                          style={styles.providerImage}
-                        />
-                        <View style={styles.providerInfo}>
-                          <Text style={styles.providerName}>
-                            Dr. {appointment.provider.name.givenName}{' '}
-                            {appointment.provider.name.familyName}
+                          onPress={onViewMyProfile}
+                      >
+                          <Text
+                              style={{
+                                  color: '#FFFFFF',
+                                  fontSize: 16,
+                                  fontWeight: 'bold',
+                              }}
+                          >
+                              MyProfile
                           </Text>
-                          <Text style={styles.specialtyText}>
-                            {appointment.speciality.name}
+                      </TouchableOpacity>
+                  ),
+                  headerRight: () => (
+                      <TouchableOpacity
+                          onPress={logoutUser}
+                          style={{
+                              padding: 8,
+                              marginLeft: 8,
+                              borderRadius: 8,
+                          }}
+                      >
+                          <Text
+                              style={{
+                                  color: '#FFFFFF',
+                                  fontSize: 16,
+                                  fontWeight: 'bold',
+                              }}
+                          >
+                              Logout
                           </Text>
-                        </View>
-                      </View>
-                    </TouchableOpacity>
-                  </View>
-                ) : (
-                  <View style={styles.appointmentDetails}>
-                    <TouchableOpacity style={styles.appointmentDetails}>
-                      <View style={styles.providerRow}>
-                        <View style={styles.providerInfo}>
-                          <Text style={styles.providerName}>
-                            {appointment.patient.name.givenName}{' '}
-                            {appointment.patient.name.familyName}
-                          </Text>
-                          <Text style={styles.specialtyText}>
-                            Gender: {appointment.patient.administrativeSex}
-                          </Text>
-                          <Text style={styles.specialtyText}>
-                            Email: {appointment.patient.email}
-                          </Text>
-                        </View>
-                      </View>
-                    </TouchableOpacity>
-                  </View>
-                )}
-              </View>
-            </View>
-          ))}
+                      </TouchableOpacity>
+                  ),
+              }}
+          />
 
-          {(!appointments || appointments.length === 0) && (
-            <View style={styles.emptyState}>
-              <Text style={styles.emptyStateText}>
-                No upcoming appointments scheduled
-              </Text>
-            </View>
-          )}
-        </View>
-      </ScrollView>
-    </>
+          <ScrollView style={styles.container}>
+              <View style={styles.scheduleButtonContainer}>
+                  <TouchableOpacity
+                      style={styles.scheduleButton}
+                      onPress={
+                          isProvider
+                              ? handleJoin
+                              : () => router.push('/book/appointment')
+                      }
+                      activeOpacity={0.7}
+                  >
+                      <View
+                          style={[
+                              styles.scheduleButtonContent,
+                              {
+                                  flex: 1,
+                                  justifyContent: 'space-between',
+                                  paddingHorizontal: 8,
+                              },
+                          ]}
+                      >
+                          <View style={styles.scheduleButtonTextContainer}>
+                              <Text style={styles.scheduleButtonTitle}>
+                                  {isProvider
+                                      ? 'Join Consultation Room'
+                                      : 'Schedule Appointment'}
+                              </Text>
+                              <Text style={styles.scheduleButtonSubtext}>
+                                  {isProvider
+                                      ? 'Start your virtual consultation with patients'
+                                      : 'Book your next visit with a healthcare provider'}
+                              </Text>
+                          </View>
+                          <View style={styles.scheduleButtonIconContainer}>
+                              <Text style={styles.scheduleButtonIcon}>→</Text>
+                          </View>
+                      </View>
+                  </TouchableOpacity>
+              </View>
+
+                  {upcomingAppointment && (
+                      <View style={styles.todayCard}>
+                          <Text style={styles.cardTitle}>
+                              Upcoming Appointment
+                          </Text>
+                          {!isProvider && (
+                              <Text style={styles.cardText}>
+                                  Provider: Dr.{' '}
+                                  {upcomingAppointment.provider.name.givenName}{' '}
+                                  {upcomingAppointment.provider.name.familyName}
+                              </Text>
+                          )}
+                          {isProvider && (
+                              <Text style={styles.cardText}>
+                                  Patient:{' '}
+                                  {upcomingAppointment.patient.name.givenName}{' '}
+                                  {upcomingAppointment.patient.name.familyName}
+                              </Text>
+                          )}
+                          <Text style={styles.cardText}>
+                              Time:{' '}
+                              {new Date(
+                                  upcomingAppointment.dateTime
+                              ).toLocaleTimeString()}
+                          </Text>
+                          {!isProvider && (
+                              <Text style={styles.cardText}>
+                                  Specialty:{' '}
+                                  {upcomingAppointment.speciality.name}
+                              </Text>
+                          )}
+                          {!isProvider && (
+                              <TouchableOpacity
+                                  style={styles.joinButton}
+                                  onPress={handleJoin}
+                              >
+                                  <Text style={styles.joinButtonText}>
+                                      Join Appointment
+                                  </Text>
+                              </TouchableOpacity>
+                          )}
+                      </View>
+                  )}
+                  <View style={styles.upcomingSection}>
+                      <View style={styles.sectionHeader}>
+                          <Text style={styles.sectionTitle}>
+                              All Appointments
+                          </Text>
+                          <Text style={styles.appointmentCount}>
+                              {appointments?.length || 0} scheduled
+                          </Text>
+                      </View>
+
+                      {appointments?.slice(0).map((appointment) => (
+                          <View
+                              key={appointment.id}
+                              style={styles.appointmentCard}>
+                              <View style={styles.appointmentHeader}>
+                                  <View style={styles.dateContainer}>
+                                      <Text style={styles.dateText}>
+                                          {new Date(
+                                              appointment.dateTime
+                                          ).toLocaleDateString('en-US', {
+                                              month: 'short',
+                                              day: 'numeric',
+                                          })}
+                                      </Text>
+                                      <Text style={styles.timeText}>
+                                          {new Date(
+                                              appointment.dateTime
+                                          ).toLocaleTimeString('en-US', {
+                                              hour: 'numeric',
+                                              minute: '2-digit',
+                                          })}
+                                      </Text>
+                                  </View>
+                                  <View style={styles.divider} />
+                                  {!isProvider ? (
+                                      <View style={styles.appointmentDetails}>
+                                          <TouchableOpacity
+                                              style={styles.appointmentDetails}
+                                              onPress={() =>
+                                                  onViewProviderProfile(
+                                                      appointment
+                                                  )
+                                              }
+                                          >
+                                              <View style={styles.providerRow}>
+                                                  <Image
+                                                      source={{
+                                                          uri: appointment
+                                                              .provider
+                                                              .photoUrl,
+                                                      }}
+                                                      style={
+                                                          styles.providerImage
+                                                      }
+                                                  />
+                                                  <View
+                                                      style={
+                                                          styles.providerInfo
+                                                      }
+                                                  >
+                                                      <Text
+                                                          style={
+                                                              styles.providerName
+                                                          }
+                                                      >
+                                                          Dr.{' '}
+                                                          {
+                                                              appointment
+                                                                  .provider.name
+                                                                  .givenName
+                                                          }{' '}
+                                                          {
+                                                              appointment
+                                                                  .provider.name
+                                                                  .familyName
+                                                          }
+                                                      </Text>
+                                                      <Text
+                                                          style={
+                                                              styles.specialtyText
+                                                          }
+                                                      >
+                                                          {
+                                                              appointment
+                                                                  .speciality
+                                                                  .name
+                                                          }
+                                                      </Text>
+                                                  </View>
+                                              </View>
+                                          </TouchableOpacity>
+                                      </View>
+                                  ) : (
+                                      <View style={styles.appointmentDetails}>
+                                          <TouchableOpacity
+                                              style={styles.appointmentDetails}
+                                          >
+                                              <View style={styles.providerRow}>
+                                                  <View
+                                                      style={
+                                                          styles.providerInfo
+                                                      }
+                                                  >
+                                                      <Text
+                                                          style={
+                                                              styles.providerName
+                                                          }
+                                                      >
+                                                          {
+                                                              appointment
+                                                                  .patient.name
+                                                                  .givenName
+                                                          }{' '}
+                                                          {
+                                                              appointment
+                                                                  .patient.name
+                                                                  .familyName
+                                                          }
+                                                      </Text>
+                                                      <Text
+                                                          style={
+                                                              styles.specialtyText
+                                                          }
+                                                      >
+                                                          Gender:{' '}
+                                                          {
+                                                              appointment
+                                                                  .patient
+                                                                  .administrativeSex
+                                                          }
+                                                      </Text>
+                                                      <Text
+                                                          style={
+                                                              styles.specialtyText
+                                                          }
+                                                      >
+                                                          Email:{' '}
+                                                          {
+                                                              appointment
+                                                                  .patient.email
+                                                          }
+                                                      </Text>
+                                                  </View>
+                                              </View>
+                                          </TouchableOpacity>
+                                      </View>
+                                  )}
+                              </View>
+                          </View>
+                      ))}
+                      
+
+                      {(!appointments || appointments.length === 0) && (
+                          <View style={styles.emptyState}>
+                              <Text style={styles.emptyStateText}>
+                                  No upcoming appointments scheduled
+                              </Text>
+                          </View>
+                      )}
+                  </View>
+          </ScrollView>
+      </>
   );
 }
 

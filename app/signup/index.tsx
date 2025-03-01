@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
@@ -10,6 +10,7 @@ import {
   SafeAreaView,
   Alert,
   ScrollView,
+  Keyboard,
 } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { emailValidation, passwordValidation } from '@/utils/validationRules';
