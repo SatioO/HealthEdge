@@ -1,10 +1,2 @@
-export const BASE_URL = 'http://localhost:8081/api/v1';
-
-
-/**
- * 
- * You can import two types of modules
- * 1. External Modules
- *      eg. import {} from "date-fns"
- * 2. Internal Modules
- */
+export const BASE_URL =
+  'http://consultation-service-env.eba-ycavn6pm.us-east-1.elasticbeanstalk.com/api/v1';

@@ -45,11 +45,12 @@ export default function DashboardScreen() {
   };
 
   const today = new Date();
-  const upcomingAppointment = appointments
+  const upcomingAppointment = [...(appointments ?? [])]
+    ?.filter((apt) => new Date(apt.dateTime).getTime() > today.getTime())
     ?.sort(
       (a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime()
     )
-    .find((apt) => {
+    ?.find((apt) => {
       const aptDate = new Date(apt.dateTime);
       return aptDate.toDateString() === today.toDateString();
     });
