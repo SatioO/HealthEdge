@@ -13,10 +13,12 @@ import {
   toggleAcceptingNewPatients,
 } from '@/services/provider';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useAuth } from '@/components/providers/AuthProvider';
 
 type ProviderProfilePageProps = {};
 
 export default function ProviderProfilePage(props: ProviderProfilePageProps) {
+  const { user } = useAuth();
   const { id } = useLocalSearchParams();
   const queryClient = useQueryClient();
   const { data: providerDetails } = useQuery(['provider', id], () =>
@@ -90,47 +92,49 @@ export default function ProviderProfilePage(props: ProviderProfilePageProps) {
                 gap: 10,
               }}
             >
-              <TouchableOpacity
-                style={[
-                  {
-                    width: 50,
-                    height: 30,
-                    justifyContent: 'center',
-                    borderRadius: 10,
-                    padding: 5,
-                    backgroundColor: providerDetails?.acceptingNewPatients
-                      ? '#4CAF50'
-                      : '#ccc',
-                  },
-                ]}
-                onPress={() => {
-                  mutateAsync({
-                    providerId: Number(id),
-                    acceptingNewPatients:
-                      !providerDetails?.acceptingNewPatients,
-                  }).then(() =>
-                    queryClient.invalidateQueries(['provider', id])
-                  );
-                }}
-              >
-                <View
+              {user?.userId === Number(id) && (
+                <TouchableOpacity
                   style={[
                     {
-                      width: 20,
-                      height: 20,
+                      width: 50,
+                      height: 30,
+                      justifyContent: 'center',
                       borderRadius: 10,
-                      backgroundColor: '#fff',
-                      transform: [
-                        {
-                          translateX: providerDetails?.acceptingNewPatients
-                            ? 20
-                            : 0,
-                        },
-                      ],
+                      padding: 5,
+                      backgroundColor: providerDetails?.acceptingNewPatients
+                        ? '#4CAF50'
+                        : '#ccc',
                     },
                   ]}
-                />
-              </TouchableOpacity>
+                  onPress={() => {
+                    mutateAsync({
+                      providerId: Number(id),
+                      acceptingNewPatients:
+                        !providerDetails?.acceptingNewPatients,
+                    }).then(() =>
+                      queryClient.invalidateQueries(['provider', id])
+                    );
+                  }}
+                >
+                  <View
+                    style={[
+                      {
+                        width: 20,
+                        height: 20,
+                        borderRadius: 10,
+                        backgroundColor: '#fff',
+                        transform: [
+                          {
+                            translateX: providerDetails?.acceptingNewPatients
+                              ? 20
+                              : 0,
+                          },
+                        ],
+                      },
+                    ]}
+                  />
+                </TouchableOpacity>
+              )}
               <Text
                 style={{
                   fontSize: 16,
