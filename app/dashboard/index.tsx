@@ -36,6 +36,8 @@ export default function DashboardScreen() {
     { enabled: isProvider }
   );
 
+  console.log({ providerDetails });
+
   const isWithin5Minutes = (appointmentTime: string) => {
     const now = new Date();
     const appointmentDate = new Date(appointmentTime);
@@ -116,55 +118,56 @@ export default function DashboardScreen() {
     <>
       <Stack.Screen
         options={{
-          title: '',
+          title: 'ReachSpecialist',
           headerStyle: {
             backgroundColor: '#4CAF50',
           },
           headerTintColor: '#FFFFFF',
           headerTitleStyle: {
             fontWeight: '500',
-            fontSize: 16,
+            fontSize: 20,
           },
-          headerShadowVisible: false,
-          headerLeft: () => (
-            <TouchableOpacity
-              style={{
-                padding: 8,
-                marginRight: 8,
-                borderRadius: 8,
-              }}
-              onPress={onViewMyProfile}
-            >
-              <Text
-                style={{
-                  color: '#FFFFFF',
-                  fontSize: 16,
-                  fontWeight: 'bold',
-                }}
-              >
-                MyProfile
-              </Text>
-            </TouchableOpacity>
-          ),
           headerRight: () => (
-            <TouchableOpacity
-              onPress={logoutUser}
+            <View
               style={{
-                padding: 8,
-                marginLeft: 8,
-                borderRadius: 8,
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginRight: 8,
               }}
             >
-              <Text
+              <TouchableOpacity
+                onPress={onViewMyProfile}
                 style={{
-                  color: '#FFFFFF',
-                  fontSize: 16,
-                  fontWeight: 'bold',
+                  padding: 8,
+                  borderRadius: 8,
                 }}
               >
-                Logout
-              </Text>
-            </TouchableOpacity>
+                <Image
+                  source={{
+                    uri:
+                      isProvider && providerDetails
+                        ? providerDetails.photoUrl
+                        : 'https://img.freepik.com/premium-vector/man-professional-business-casual-young-avatar-icon-illustration_1277826-622.jpg',
+                  }}
+                  style={{
+                    width: 36,
+                    height: 36,
+                    borderRadius: 16,
+                    borderWidth: 2,
+                    borderColor: '#FFFFFF',
+                  }}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={logoutUser}
+                style={{
+                  padding: 8,
+                  borderRadius: 8,
+                }}
+              >
+                <Text style={{ color: '#FFFFFF', fontSize: 16 }}>Logout</Text>
+              </TouchableOpacity>
+            </View>
           ),
         }}
       />
