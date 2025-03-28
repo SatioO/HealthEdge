@@ -16,7 +16,8 @@ import { useForm, Controller } from 'react-hook-form';
 import { emailValidation, passwordValidation } from '@/utils/validationRules';
 import { Dropdown } from 'react-native-element-dropdown';
 import { signup } from '@/services/auth';
-import { router } from 'expo-router';
+import { router, Stack } from 'expo-router';
+import Logo from '@/assets/logo/logo';
 
 const SignupScreen = () => {
   const {
@@ -103,250 +104,283 @@ const SignupScreen = () => {
 
   return (
     <View style={styles.mainContent}>
-      <SafeAreaView style={styles.container}>
-        <ScrollView
-          keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}
-        >
-          <View style={styles.content}>
-            <View style={styles.titleContainer}>
-              <Text style={styles.mainTitle}>Welcome to ReachSpecialist</Text>
-              <Text style={styles.subtitle}>Create Your Patient Account</Text>
-              <Text style={styles.description}>
-                Join our secure healthcare platform to book appointments, manage
-                your medical records, and connect with healthcare providers -
-                all in one place.
-              </Text>
-            </View>
+      <View style={{ flex: 1, backgroundColor: 'rgba(128, 90, 213, 0.9)' }}>
+        <SafeAreaView style={{ flex: 1 }}>
+          <ScrollView
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+          >
+            <View style={styles.content}>
+              <View style={styles.titleContainer}>
+                <Logo height={60} width={180} />
+                <Text style={styles.mainTitle}>
+                  Begin Your Healthcare Journey
+                </Text>
+                <Text style={styles.description}>
+                  Access top healthcare providers, schedule appointments
+                  seamlessly, and manage your medical journey - all from one
+                  secure platform.
+                </Text>
+              </View>
 
-            <KeyboardAvoidingView
-              behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-              style={styles.formContainer}
-            >
-              <View style={styles.nameContainer}>
-                <View style={[styles.nameInputWrapper, { flex: 2 }]}>
-                  <Controller
-                    control={control}
-                    name="firstName"
-                    rules={{ required: 'First name is required' }}
-                    render={({ field: { onChange, value, onBlur } }) => (
-                      <TextInput
-                        style={[
-                          styles.nameInput,
-                          errors.firstName && styles.inputError,
-                        ]}
-                        placeholder="First"
-                        value={value}
-                        onChangeText={onChange}
-                        onBlur={onBlur}
-                      />
-                    )}
-                  />
-                  {errors.firstName && (
-                    <Text style={styles.nerrorText}>
-                      {errors.firstName.message}
-                    </Text>
-                  )}
-                </View>
-
-                <View style={[styles.nameInputWrapper, { flex: 1 }]}>
-                  <Controller
-                    control={control}
-                    name="middleName"
-                    render={({ field: { onChange, value, onBlur } }) => (
-                      <TextInput
-                        style={[
-                          styles.nameInput,
-                          errors.middleName && styles.inputError,
-                        ]}
-                        placeholder="M"
-                        value={value}
-                        onChangeText={onChange}
-                        onBlur={onBlur}
-                        maxLength={1}
-                      />
-                    )}
-                  />
-                  {errors.middleName && (
-                    <Text style={styles.nerrorText}>
-                      {errors.middleName.message}
-                    </Text>
-                  )}
-                </View>
-
-                <View style={[styles.nameInputWrapper, { flex: 2 }]}>
-                  <Controller
-                    control={control}
-                    name="lastName"
-                    rules={{ required: 'Last name is required' }}
-                    render={({ field: { onChange, value, onBlur } }) => (
-                      <TextInput
-                        style={[
-                          styles.nameInput,
-                          errors.lastName && styles.inputError,
-                        ]}
-                        placeholder="Last"
-                        value={value}
-                        onChangeText={onChange}
-                        onBlur={onBlur}
-                      />
-                    )}
-                  />
-                  {errors.lastName && (
-                    <Text style={styles.nerrorText}>
-                      {errors.lastName.message}
-                    </Text>
-                  )}
-                </View>
-              </View>
-              <View style={styles.inputContainer}>
-                <Controller
-                  control={control}
-                  name="email"
-                  rules={emailValidation}
-                  render={({ field: { onChange, value, onBlur } }) => (
-                    <TextInput
-                      style={[styles.input, errors.email && styles.inputError]}
-                      placeholder="Email"
-                      value={value}
-                      onChangeText={onChange}
-                      onBlur={onBlur}
-                      autoCapitalize="none"
-                      autoCorrect={false}
-                      keyboardType="email-address"
-                    />
-                  )}
-                />
-                {errors.email && (
-                  <Text style={styles.errorText}>{errors.email.message}</Text>
-                )}
-              </View>
-              <View style={styles.inputContainer}>
-                <Controller
-                  control={control}
-                  name="password"
-                  rules={passwordValidation}
-                  render={({ field: { onChange, value, onBlur } }) => (
-                    <TextInput
-                      style={[
-                        styles.input,
-                        errors.password && styles.inputError,
-                      ]}
-                      placeholder="Password"
-                      value={value}
-                      onChangeText={onChange}
-                      onBlur={onBlur}
-                      secureTextEntry
-                      autoCapitalize="none"
-                      autoCorrect={false}
-                    />
-                  )}
-                />
-                {errors.password && (
-                  <Text style={styles.errorText}>
-                    {errors.password.message}
-                  </Text>
-                )}
-              </View>
-              <View style={styles.inputContainer}>
-                <Controller
-                  control={control}
-                  name="phoneNumber"
-                  rules={phoneValidation}
-                  render={({ field: { onChange, value, onBlur } }) => (
-                    <TextInput
-                      style={[
-                        styles.input,
-                        errors.phoneNumber && styles.inputError,
-                      ]}
-                      placeholder="Phone Number"
-                      value={value}
-                      onChangeText={onChange}
-                      onBlur={onBlur}
-                      keyboardType="phone-pad"
-                    />
-                  )}
-                />
-                {errors.phoneNumber && (
-                  <Text style={styles.errorText}>
-                    {errors.phoneNumber.message}
-                  </Text>
-                )}
-              </View>
-              <View style={styles.inputContainer}>
-                <Controller
-                  control={control}
-                  name="gender"
-                  rules={{ required: 'Gender is required' }}
-                  render={({ field: { onChange, value } }) => (
-                    <Dropdown
-                      containerStyle={styles.container}
-                      style={styles.dropdown}
-                      placeholder="Select Gender"
-                      value={value}
-                      data={[
-                        { label: 'Male', value: 'M' },
-                        { label: 'Female', value: 'F' },
-                      ]}
-                      onChange={(item) => onChange(item.value)}
-                      labelField={'label'}
-                      valueField={'value'}
-                      flatListProps={{
-                        ListEmptyComponent: <RenderEmpty />,
-                      }}
-                    />
-                  )}
-                />
-                {errors.gender && (
-                  <Text style={styles.errorText}>{errors.gender.message}</Text>
-                )}
-              </View>
-              <View style={styles.inputContainer}>
-                <Controller
-                  control={control}
-                  name="maritalStatus"
-                  rules={{ required: 'Marital Status is required' }}
-                  render={({ field: { onChange, value } }) => (
-                    <Dropdown
-                      containerStyle={styles.container}
-                      style={styles.dropdown}
-                      placeholder="Select Marital Status"
-                      value={value}
-                      data={[
-                        { label: 'Single', value: 'S' },
-                        { label: 'Married', value: 'M' },
-                        { label: 'Divorced', value: 'D' },
-                        { label: 'Widow/Seperated', value: 'W' },
-                      ]}
-                      onChange={(item) => onChange(item.value)}
-                      labelField={'label'}
-                      valueField={'value'}
-                      flatListProps={{
-                        ListEmptyComponent: <RenderEmpty />,
-                      }}
-                    />
-                  )}
-                />
-                {errors.gender && (
-                  <Text style={styles.errorText}>{errors.gender.message}</Text>
-                )}
-              </View>
-              <TouchableOpacity
-                style={styles.button}
-                onPress={handleSubmit(onSubmit)}
+              <KeyboardAvoidingView
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                style={styles.formContainer}
               >
-                <Text style={styles.buttonText}>Sign Up</Text>
-              </TouchableOpacity>
-            </KeyboardAvoidingView>
-            <View style={styles.signupContainer}>
-              <Text style={styles.signupText}>Already have an account?</Text>
-              <TouchableOpacity onPress={() => router.push('/login')}>
-                <Text style={styles.signupLink}>Sign in</Text>
-              </TouchableOpacity>
+                <View style={styles.nameContainer}>
+                  <View style={[styles.nameInputWrapper, { flex: 2 }]}>
+                    <Controller
+                      control={control}
+                      name="firstName"
+                      rules={{ required: 'First name is required' }}
+                      render={({ field: { onChange, value, onBlur } }) => (
+                        <TextInput
+                          style={[
+                            styles.nameInput,
+                            errors.firstName && styles.inputError,
+                          ]}
+                          placeholder="First Name"
+                          placeholderTextColor="#666"
+                          value={value}
+                          onChangeText={onChange}
+                          onBlur={onBlur}
+                        />
+                      )}
+                    />
+                    {errors.firstName && (
+                      <Text style={styles.errorText}>
+                        {errors.firstName.message}
+                      </Text>
+                    )}
+                  </View>
+
+                  <View style={[styles.nameInputWrapper, { flex: 1 }]}>
+                    <Controller
+                      control={control}
+                      name="middleName"
+                      render={({ field: { onChange, value, onBlur } }) => (
+                        <TextInput
+                          style={[
+                            styles.nameInput,
+                            errors.middleName && styles.inputError,
+                          ]}
+                          placeholder="MI"
+                          placeholderTextColor="#666"
+                          value={value}
+                          onChangeText={onChange}
+                          onBlur={onBlur}
+                          maxLength={1}
+                        />
+                      )}
+                    />
+                    {errors.middleName && (
+                      <Text style={styles.errorText}>
+                        {errors.middleName.message}
+                      </Text>
+                    )}
+                  </View>
+
+                  <View style={[styles.nameInputWrapper, { flex: 2 }]}>
+                    <Controller
+                      control={control}
+                      name="lastName"
+                      rules={{ required: 'Last name is required' }}
+                      render={({ field: { onChange, value, onBlur } }) => (
+                        <TextInput
+                          style={[
+                            styles.nameInput,
+                            errors.lastName && styles.inputError,
+                          ]}
+                          placeholder="Last Name"
+                          placeholderTextColor="#666"
+                          value={value}
+                          onChangeText={onChange}
+                          onBlur={onBlur}
+                        />
+                      )}
+                    />
+                    {errors.lastName && (
+                      <Text style={styles.errorText}>
+                        {errors.lastName.message}
+                      </Text>
+                    )}
+                  </View>
+                </View>
+
+                <View style={styles.inputContainer}>
+                  <Controller
+                    control={control}
+                    name="email"
+                    rules={emailValidation}
+                    render={({ field: { onChange, value, onBlur } }) => (
+                      <TextInput
+                        style={[
+                          styles.input,
+                          errors.email && styles.inputError,
+                        ]}
+                        placeholder="Email Address"
+                        placeholderTextColor="#666"
+                        value={value}
+                        onChangeText={onChange}
+                        onBlur={onBlur}
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                        keyboardType="email-address"
+                      />
+                    )}
+                  />
+                  {errors.email && (
+                    <Text style={styles.errorText}>{errors.email.message}</Text>
+                  )}
+                </View>
+
+                <View style={styles.inputContainer}>
+                  <Controller
+                    control={control}
+                    name="password"
+                    rules={passwordValidation}
+                    render={({ field: { onChange, value, onBlur } }) => (
+                      <TextInput
+                        style={[
+                          styles.input,
+                          errors.password && styles.inputError,
+                        ]}
+                        placeholder="Create Password"
+                        placeholderTextColor="#666"
+                        value={value}
+                        onChangeText={onChange}
+                        onBlur={onBlur}
+                        secureTextEntry
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                      />
+                    )}
+                  />
+                  {errors.password && (
+                    <Text style={styles.errorText}>
+                      {errors.password.message}
+                    </Text>
+                  )}
+                </View>
+
+                <View style={styles.inputContainer}>
+                  <Controller
+                    control={control}
+                    name="phoneNumber"
+                    rules={phoneValidation}
+                    render={({ field: { onChange, value, onBlur } }) => (
+                      <TextInput
+                        style={[
+                          styles.input,
+                          errors.phoneNumber && styles.inputError,
+                        ]}
+                        placeholder="Phone Number (10 digits)"
+                        placeholderTextColor="#666"
+                        value={value}
+                        onChangeText={onChange}
+                        onBlur={onBlur}
+                        keyboardType="phone-pad"
+                      />
+                    )}
+                  />
+                  {errors.phoneNumber && (
+                    <Text style={styles.errorText}>
+                      {errors.phoneNumber.message}
+                    </Text>
+                  )}
+                </View>
+
+                <View style={styles.inputContainer}>
+                  <Controller
+                    control={control}
+                    name="gender"
+                    rules={{ required: 'Please select your gender' }}
+                    render={({ field: { onChange, value } }) => (
+                      <Dropdown
+                        style={styles.dropdown}
+                        placeholder="Select Gender"
+                        // placeholderStyle={styles.dropdownPlaceholder}
+                        value={value}
+                        data={[
+                          { label: 'Male', value: 'M' },
+                          { label: 'Female', value: 'F' },
+                        ]}
+                        onChange={(item) => onChange(item.value)}
+                        labelField={'label'}
+                        valueField={'value'}
+                        flatListProps={{
+                          ListEmptyComponent: <RenderEmpty />,
+                        }}
+                      />
+                    )}
+                  />
+                  {errors.gender && (
+                    <Text style={styles.errorText}>
+                      {errors.gender.message}
+                    </Text>
+                  )}
+                </View>
+
+                <View style={styles.inputContainer}>
+                  <Controller
+                    control={control}
+                    name="maritalStatus"
+                    rules={{ required: 'Please select your marital status' }}
+                    render={({ field: { onChange, value } }) => (
+                      <Dropdown
+                        style={styles.dropdown}
+                        placeholder="Select Marital Status"
+                        // placeholderStyle={styles.dropdownPlaceholder}
+                        value={value}
+                        data={[
+                          { label: 'Single', value: 'S' },
+                          { label: 'Married', value: 'M' },
+                          { label: 'Divorced', value: 'D' },
+                          { label: 'Widowed/Separated', value: 'W' },
+                        ]}
+                        onChange={(item) => onChange(item.value)}
+                        labelField={'label'}
+                        valueField={'value'}
+                        flatListProps={{
+                          ListEmptyComponent: <RenderEmpty />,
+                        }}
+                      />
+                    )}
+                  />
+                  {errors.maritalStatus && (
+                    <Text style={styles.errorText}>
+                      {errors.maritalStatus.message}
+                    </Text>
+                  )}
+                </View>
+
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: '#805AD5',
+                    height: 48,
+                    borderRadius: 8,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: 16,
+                  }}
+                  onPress={handleSubmit(onSubmit)}
+                >
+                  <Text style={styles.buttonText}>Create Account</Text>
+                </TouchableOpacity>
+              </KeyboardAvoidingView>
+
+              <View style={styles.signupContainer}>
+                <Text style={styles.signupText}>Already registered?</Text>
+                <TouchableOpacity onPress={() => router.push('/login')}>
+                  <Text style={{ color: '#805AD5', fontWeight: '600' }}>
+                    Login here
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-        </ScrollView>
-      </SafeAreaView>
+          </ScrollView>
+        </SafeAreaView>
+      </View>
     </View>
   );
 };
@@ -354,7 +388,6 @@ const SignupScreen = () => {
 const styles = StyleSheet.create({
   mainContent: {
     flex: 1,
-    backgroundColor: '#fff',
   },
   container: {
     flex: 1,
@@ -362,8 +395,10 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
+    margin: 16,
     padding: 16,
     backgroundColor: '#fff',
+    borderRadius: 16,
   },
   formContainer: {
     flex: 1,
