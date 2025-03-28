@@ -67,10 +67,6 @@ export default function ProviderProfilePage(props: ProviderProfilePageProps) {
               {providerDetails?.acceptingNewPatients ? 'Yes' : 'No'}
             </Text>
           </View>
-          <View style={styles.infoContainer}>
-            <Text style={styles.infoLabel}>Website:</Text>
-            <Text style={styles.infoValue}>{providerDetails?.websiteUrl}</Text>
-          </View>
         </View>
       </ScrollView>
     </>
