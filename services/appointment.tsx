@@ -1,4 +1,3 @@
-
 import { BASE_URL } from '@/services';
 import { Provider } from '@/services/provider';
 import { getStoredAuthData } from '@/services/auth';
@@ -89,9 +88,9 @@ export const getAppointments = async (): Promise<AppointmentResponseDTO[]> => {
 
     let url = '';
     if (auth?.user.roles.includes('provider')) {
-      url = `${BASE_URL}/providers/${auth?.user.userId}/appointments?sort=dateTime`;
+      url = `${BASE_URL}/providers/${auth?.user.userId}/appointments?page=0&size=5&sort=dateTime,DESC`;
     } else {
-      url = `${BASE_URL}/patients/${auth?.user.userId}/appointments?sort=dateTime`;
+      url = `${BASE_URL}/patients/${auth?.user.userId}/appointments?page=0&size=5&sort=dateTime,DESC`;
     }
     const response = await fetch(url, {
       headers: {
