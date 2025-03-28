@@ -16,6 +16,7 @@ import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { SvgXml } from 'react-native-svg';
+import Logo from '@/assets/logo/logo';
 
 const BACKGROUND_IMAGE =
   'https://cdn.pixabay.com/photo/2021/10/11/17/37/doctor-6701410_1280.jpg';
@@ -79,20 +80,7 @@ const SignInScreen = () => {
                 }}
               >
                 <View style={{ alignItems: 'center', marginBottom: 24 }}>
-                  <SvgXml
-                    xml={`<svg width="200" height="60" viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg" fill="none">
-                      <text x="10" y="40" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#1A365D">
-                        Reach 
-                      </text>
-                      <text x="80" y="40" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#805AD5">
-                        Specialist
-                      </text>
-                      <path d="M50 20 L65 5 L80 20" stroke="#1A365D" stroke-width="4" fill="none"/>
-                      <circle cx="65" cy="5" r="3" fill="#805AD5"/>
-                    </svg>`}
-                    width={240}
-                    height={56}
-                  />
+                  <Logo />
 
                   <View>
                     <Text

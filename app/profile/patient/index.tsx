@@ -4,6 +4,7 @@ import { Text, View, StyleSheet, ScrollView, Image } from 'react-native';
 import { useQuery } from 'react-query';
 import { getPatientDetails } from '@/services/patient';
 import { SvgXml } from 'react-native-svg';
+import Logo from '@/assets/logo/logo';
 
 type PatientProfilePageProps = {};
 
@@ -17,22 +18,8 @@ export default function PatientProfilePage(props: PatientProfilePageProps) {
     <>
       <Stack.Screen
         options={{
-          headerTitle: () => (
-            <SvgXml
-              xml={`<svg width="200" height="60" viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg" fill="none">
-                <text x="10" y="40" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#1A365D">
-                  Reach 
-                </text>
-                <text x="80" y="40" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#805AD5">
-                  Specialist
-                </text>
-                <path d="M50 20 L65 5 L80 20" stroke="#1A365D" stroke-width="4" fill="none"/>
-                <circle cx="65" cy="5" r="3" fill="#805AD5"/>
-              </svg>`}
-              width={160}
-              height={48}
-            />
-          ),
+          title: '',
+          headerRight: () => <Logo height={48} width={140} />,
           headerBackground: () => (
             <View
               style={{
