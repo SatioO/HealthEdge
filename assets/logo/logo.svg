@@ -1,0 +1,10 @@
+<svg width="200" height="60" viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg" fill="none">
+  <text x="10" y="40" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#2D7DD2">
+    Reach 
+  </text>
+  <text x="80" y="40" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#FFD700">
+    Specialist
+  </text>
+  <path d="M50 20 L65 5 L80 20" stroke="#2D7DD2" stroke-width="4" fill="none"/>
+  <circle cx="65" cy="5" r="3" fill="#FFD700"/>
+</svg>

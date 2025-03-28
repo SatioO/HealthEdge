@@ -14,6 +14,7 @@ import {
 } from '@/services/provider';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useAuth } from '@/components/providers/AuthProvider';
+import { SvgXml } from 'react-native-svg';
 
 type ProviderProfilePageProps = {};
 
@@ -39,18 +40,42 @@ export default function ProviderProfilePage(props: ProviderProfilePageProps) {
     <>
       <Stack.Screen
         options={{
-          title: '',
+          headerTitle: () => (
+            <SvgXml
+              xml={`<svg width="200" height="60" viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <text x="10" y="40" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#1A365D">
+                  Reach 
+                </text>
+                <text x="80" y="40" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#805AD5">
+                  Specialist
+                </text>
+                <path d="M50 20 L65 5 L80 20" stroke="#1A365D" stroke-width="4" fill="none"/>
+                <circle cx="65" cy="5" r="3" fill="#805AD5"/>
+              </svg>`}
+              width={160}
+              height={48}
+            />
+          ),
+          headerBackground: () => (
+            <View
+              style={{
+                flex: 1,
+                backgroundColor: '#F7FAFC',
+                backgroundImage:
+                  'linear-gradient(135deg, #F7FAFC 0%, #EDF2F7 100%)',
+              }}
+            />
+          ),
           headerStyle: {
-            backgroundColor: '#4CAF50',
+            backgroundColor: '#F7FAFC',
           },
-          headerTintColor: '#FFFFFF',
+          headerTintColor: '#1A365D',
           headerTitleStyle: {
             fontWeight: '500',
-            fontSize: 16,
+            fontSize: 20,
           },
-          headerShadowVisible: false,
         }}
-      ></Stack.Screen>
+      />
       <ScrollView style={styles.page}>
         <View style={styles.mainContainer}>
           <Image
@@ -102,7 +127,7 @@ export default function ProviderProfilePage(props: ProviderProfilePageProps) {
                       borderRadius: 10,
                       padding: 5,
                       backgroundColor: providerDetails?.acceptingNewPatients
-                        ? '#4CAF50'
+                        ? '#805AD5'
                         : '#ccc',
                     },
                   ]}
@@ -168,7 +193,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     marginBottom: 20,
     borderWidth: 2,
-    borderColor: '#4CAF50',
+    borderColor: '#805AD5',
   },
   name: {
     fontSize: 24,
@@ -178,7 +203,7 @@ const styles = StyleSheet.create({
   },
   speciality: {
     fontSize: 18,
-    color: '#4CAF50',
+    color: '#805AD5',
     marginBottom: 20,
   },
   bio: {
