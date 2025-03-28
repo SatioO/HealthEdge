@@ -17,6 +17,7 @@ import Step2 from './steps/Step2';
 import Step3 from './steps/Step3';
 import Step4 from './steps/Step4';
 import { formatInTimeZone } from 'date-fns-tz';
+import Logo from '@/assets/logo/logo';
 
 export default function BookAppointment() {
   const [currentStep, setCurrentStep] = useState<number>(1);
@@ -67,31 +68,15 @@ export default function BookAppointment() {
       <Stack.Screen
         options={{
           title: '',
+          headerRight: () => <Logo height={48} width={140} />,
           headerStyle: {
-            backgroundColor: '#4CAF50',
+            backgroundColor: '#F7FAFC',
           },
-          headerTintColor: '#FFFFFF',
+          headerTintColor: '#1A365D',
           headerTitleStyle: {
-            fontWeight: '500',
-            fontSize: 16,
+            fontWeight: 500,
+            fontSize: 20,
           },
-          headerShadowVisible: false,
-          headerLeft: () => (
-            <TouchableOpacity
-              onPress={() => router.back()}
-              style={{
-                padding: 8,
-                marginLeft: 8,
-                borderRadius: 8,
-              }}
-            >
-              <Text
-                style={{ color: '#FFFFFF', fontSize: 16, fontWeight: 'bold' }}
-              >
-                Back
-              </Text>
-            </TouchableOpacity>
-          ),
         }}
       />
       <View style={styles.mainContent}>
@@ -116,28 +101,78 @@ export default function BookAppointment() {
           <View style={styles.buttonContainer}>
             {currentStep > 1 && currentStep !== 4 && (
               <TouchableOpacity
-                style={styles.button}
+                style={{
+                  backgroundColor: '#805AD5',
+                  height: 48,
+                  borderRadius: 8,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  paddingHorizontal: 24,
+                }}
                 onPress={() => setCurrentStep((prev) => prev - 1)}
               >
-                <Text style={styles.buttonText}>Back</Text>
+                <Text
+                  style={{ color: '#FFFFFF', fontSize: 16, fontWeight: '600' }}
+                >
+                  Back
+                </Text>
               </TouchableOpacity>
             )}
             {currentStep < 3 && (
-              <TouchableOpacity style={styles.button} onPress={handleNext}>
-                <Text style={styles.buttonText}>Next</Text>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: '#805AD5',
+                  height: 48,
+                  borderRadius: 8,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  paddingHorizontal: 24,
+                }}
+                onPress={handleNext}
+              >
+                <Text
+                  style={{ color: '#FFFFFF', fontSize: 16, fontWeight: '600' }}
+                >
+                  Next
+                </Text>
               </TouchableOpacity>
             )}
             {currentStep === 3 && (
-              <TouchableOpacity style={styles.button} onPress={handleNext}>
-                <Text style={styles.buttonText}>Book</Text>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: '#805AD5',
+                  height: 48,
+                  borderRadius: 8,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  paddingHorizontal: 24,
+                }}
+                onPress={handleNext}
+              >
+                <Text
+                  style={{ color: '#FFFFFF', fontSize: 16, fontWeight: '600' }}
+                >
+                  Book
+                </Text>
               </TouchableOpacity>
             )}
             {currentStep === 4 && (
               <TouchableOpacity
-                style={styles.button}
+                style={{
+                  backgroundColor: '#805AD5',
+                  height: 48,
+                  borderRadius: 8,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  paddingHorizontal: 24,
+                }}
                 onPress={() => router.replace('/dashboard')}
               >
-                <Text style={styles.buttonText}>Go Home</Text>
+                <Text
+                  style={{ color: '#FFFFFF', fontSize: 16, fontWeight: '600' }}
+                >
+                  Go Home
+                </Text>
               </TouchableOpacity>
             )}
           </View>
