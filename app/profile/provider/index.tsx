@@ -1,16 +1,36 @@
 import { Stack, useLocalSearchParams } from 'expo-router';
 import React from 'react';
-import { Text, View, StyleSheet, ScrollView } from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import { Image } from 'expo-image';
-import { getProviderDetails } from '@/services/provider';
-import { useQuery } from 'react-query';
+import {
+  getProviderDetails,
+  toggleAcceptingNewPatients,
+} from '@/services/provider';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 type ProviderProfilePageProps = {};
 
 export default function ProviderProfilePage(props: ProviderProfilePageProps) {
   const { id } = useLocalSearchParams();
+  const queryClient = useQueryClient();
   const { data: providerDetails } = useQuery(['provider', id], () =>
     getProviderDetails(Number(id))
+  );
+
+  const { mutateAsync } = useMutation(
+    ({
+      providerId,
+      acceptingNewPatients,
+    }: {
+      providerId: number;
+      acceptingNewPatients: boolean;
+    }) => toggleAcceptingNewPatients(providerId, acceptingNewPatients)
   );
 
   return (
@@ -63,9 +83,63 @@ export default function ProviderProfilePage(props: ProviderProfilePageProps) {
           </View>
           <View style={styles.infoContainer}>
             <Text style={styles.infoLabel}>Accepting New Patients:</Text>
-            <Text style={styles.infoValue}>
-              {providerDetails?.acceptingNewPatients ? 'Yes' : 'No'}
-            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: 10,
+              }}
+            >
+              <TouchableOpacity
+                style={[
+                  {
+                    width: 50,
+                    height: 30,
+                    justifyContent: 'center',
+                    borderRadius: 10,
+                    padding: 5,
+                    backgroundColor: providerDetails?.acceptingNewPatients
+                      ? '#4CAF50'
+                      : '#ccc',
+                  },
+                ]}
+                onPress={() => {
+                  mutateAsync({
+                    providerId: Number(id),
+                    acceptingNewPatients:
+                      !providerDetails?.acceptingNewPatients,
+                  }).then(() =>
+                    queryClient.invalidateQueries(['provider', id])
+                  );
+                }}
+              >
+                <View
+                  style={[
+                    {
+                      width: 20,
+                      height: 20,
+                      borderRadius: 10,
+                      backgroundColor: '#fff',
+                      transform: [
+                        {
+                          translateX: providerDetails?.acceptingNewPatients
+                            ? 20
+                            : 0,
+                        },
+                      ],
+                    },
+                  ]}
+                />
+              </TouchableOpacity>
+              <Text
+                style={{
+                  fontSize: 16,
+                  color: '#666',
+                }}
+              >
+                {providerDetails?.acceptingNewPatients ? 'Yes' : 'No'}
+              </Text>
+            </View>
           </View>
         </View>
       </ScrollView>
@@ -113,6 +187,7 @@ const styles = StyleSheet.create({
   infoContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     width: '100%',
     marginBottom: 10,
     paddingVertical: 10,
