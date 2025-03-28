@@ -67,7 +67,7 @@ export default function AuthProvider({
     }, []);
 
     React.useEffect(() => {
-        // checkAuthStatus();
+        checkAuthStatus();
     }, [checkAuthStatus]);
 
     const authContext = React.useMemo(

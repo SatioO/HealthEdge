@@ -97,6 +97,7 @@ export default function DashboardScreen() {
 
   function onViewMyProfile() {
     const userId = user?.userId;
+
     router.push({
       pathname: `./profile/${isProvider ? 'provider' : 'patient'}`,
       params: {
