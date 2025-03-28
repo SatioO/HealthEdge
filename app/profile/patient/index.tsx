@@ -1,6 +1,6 @@
 import { Stack, useLocalSearchParams } from 'expo-router';
 import React from 'react';
-import { Text, View, StyleSheet, ScrollView } from 'react-native';
+import { Text, View, StyleSheet, ScrollView, Image } from 'react-native';
 import { useQuery } from 'react-query';
 import { getPatientDetails } from '@/services/patient';
 
@@ -16,7 +16,7 @@ export default function PatientProfilePage(props: PatientProfilePageProps) {
     <>
       <Stack.Screen
         options={{
-          title: 'Patient Profile',
+          title: '',
           headerStyle: {
             backgroundColor: '#4CAF50',
           },
@@ -29,143 +29,108 @@ export default function PatientProfilePage(props: PatientProfilePageProps) {
         }}
       ></Stack.Screen>
       <ScrollView style={styles.page}>
-        <View style={styles.maincontainer}>
-          <View style={styles.profileImageContainer}>
-            <View style={styles.profileImagePlaceholder}></View>
+        <View style={styles.mainContainer}>
+          <Image
+            source={{
+              uri: 'https://img.freepik.com/premium-vector/man-professional-business-casual-young-avatar-icon-illustration_1277826-622.jpg',
+            }}
+            style={styles.imageContainer}
+          />
+          <Text style={styles.name}>
+            {patientDetails?.name?.givenName} {patientDetails?.name?.familyName}
+          </Text>
+          <Text style={styles.speciality}>{patientDetails?.email}</Text>
+          <View style={styles.infoContainer}>
+            <Text style={styles.infoLabel}>Email:</Text>
+            <Text style={styles.infoValue}>{patientDetails?.email}</Text>
           </View>
-        </View>
-        <View style={styles.nameContainer}>
-          <View>
-            <Text
-              style={{ fontSize: 20, fontWeight: 'bold', textAlign: 'center' }}
-            >
-              {patientDetails?.name?.givenName}{' '}
-              {patientDetails?.name?.familyName}
+          <View style={styles.infoContainer}>
+            <Text style={styles.infoLabel}>DOB:</Text>
+            <Text style={styles.infoValue}>
+              {new Date(patientDetails?.dob).toLocaleDateString()}
             </Text>
           </View>
-          <View>
-            <Text style={styles.speciality}>{patientDetails?.email}</Text>
+          <View style={styles.infoContainer}>
+            <Text style={styles.infoLabel}>Marital Status:</Text>
+            <Text style={styles.infoValue}>
+              {patientDetails?.maritalStatus}
+            </Text>
           </View>
-        </View>
-        <View style={styles.infoContainer}>
-          <Text style={styles.infoLabel}>Date of Birth:</Text>
-          <Text style={styles.infoValue}>
-            {new Date(patientDetails?.dob).toLocaleDateString()}
-          </Text>
-        </View>
-        <View style={styles.infoContainer}>
-          <Text style={styles.infoLabel}>Sex:</Text>
-          <Text style={styles.infoValue}>
-            {patientDetails?.administrativeSex}
-          </Text>
-        </View>
-        <View style={styles.infoContainer}>
-          <Text style={styles.infoLabel}>Marital Status:</Text>
-          <Text style={styles.infoValue}>{patientDetails?.maritalStatus}</Text>
-        </View>
-        <View style={styles.infoContainer}>
-          <Text style={styles.infoLabel}>Status:</Text>
-          <Text style={styles.infoValue}>{patientDetails?.status}</Text>
-        </View>
-        <View style={styles.infoContainer}>
-          <Text style={styles.infoLabel}>Created At:</Text>
-          <Text style={styles.infoValue}>
-            {new Date(patientDetails?.createdAt).toLocaleString()}
-          </Text>
-        </View>
-        <View style={styles.infoContainer}>
-          <Text style={styles.infoLabel}>Updated At:</Text>
-          <Text style={styles.infoValue}>
-            {new Date(patientDetails?.updatedAt).toLocaleString()}
-          </Text>
-        </View>
-        <View style={styles.infoContainer}>
-          <Text style={styles.infoLabel}>Is Deceased:</Text>
-          <Text style={styles.infoValue}>
-            {patientDetails?.is_deceased === 'Y' ? 'Yes' : 'No'}
-          </Text>
+          <View style={styles.infoContainer}>
+            <Text style={styles.infoLabel}>Administrative Sex:</Text>
+            <Text style={styles.infoValue}>
+              {patientDetails?.administrativeSex}
+            </Text>
+          </View>
+          <View style={styles.infoContainer}>
+            <Text style={styles.infoLabel}>Status:</Text>
+            <Text style={styles.infoValue}>{patientDetails?.status}</Text>
+          </View>
         </View>
       </ScrollView>
     </>
   );
 }
+
 const styles = StyleSheet.create({
   page: {
-    backgroundColor: '#fff',
-    padding: 16,
-  },
-  container: {
+    backgroundColor: '#F9F9F9',
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 20,
-    backgroundColor: '#fff',
   },
-  profileImage: {
-    width: 350,
-    height: 350,
-  },
-  profileImageContainer: {
-    justifyContent: 'center',
+  mainContainer: {
+    flex: 1,
+    marginTop: 20,
+    marginHorizontal: 20,
     alignItems: 'center',
   },
-  profileImagePlaceholder: {
-    width: 150,
-    height: 150,
-    borderRadius: 150,
-    backgroundColor: '#ccc',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  profileImageText: {
-    fontSize: 40,
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-  nameContainer: {
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
+  imageContainer: {
+    height: 200,
+    width: 200,
+    borderRadius: 100,
     marginBottom: 20,
+    borderWidth: 2,
+    borderColor: '#4CAF50',
+  },
+  name: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 10,
   },
   speciality: {
+    fontSize: 18,
+    color: '#4CAF50',
+    marginBottom: 20,
+  },
+  bio: {
     fontSize: 16,
     color: '#666',
-    textAlign: 'center', // Align text to the center
-  },
-  errorText: {
-    color: 'red',
-    fontSize: 16,
-  },
-  maincontainer: {
-    flex: 1,
-    marginTop: 50,
-    margin: 30,
-    padding: 20, // Add padding for better appearance
-    justifyContent: 'center',
-    alignItems: 'center',
     textAlign: 'center',
-    alignContent: 'center',
+    marginBottom: 20,
+    paddingHorizontal: 10,
   },
   infoContainer: {
-    flexDirection: 'column',
+    flexDirection: 'row',
     justifyContent: 'space-between',
-    marginVertical: 10,
     width: '100%',
+    marginBottom: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
   infoLabel: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: '600',
     color: '#333',
   },
   infoValue: {
     fontSize: 16,
     color: '#666',
-  },
-  bio: {
-    fontFamily: 'times-roman',
-    fontSize: 20,
-    textAlign: 'center',
-    fontWeight: 'bold',
   },
 });
